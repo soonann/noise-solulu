@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Audio Streamer</title>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Permission Button -->
     <button id="requestPermissions">Request Permissions</button>
-    
+
     <!-- Start Recording Button -->
     <button id="startRecording" disabled>Start Recording</button>
 
@@ -16,70 +16,82 @@
     <button id="stopRecording" disabled>Stop Recording</button>
 
     <script>
-        let hasPermissions = false;
-        let isRecording = false;
-        let mediaRecorder = null;
-        let audioChunks = [];
+      let hasPermissions = false;
+      let isRecording = false;
+      let mediaRecorder = null;
+      let audioChunks = [];
 
-        document.getElementById("requestPermissions").addEventListener("click", async () => {
-            try {
-                // Request for microphone permission
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      document
+        .getElementById("requestPermissions")
+        .addEventListener("click", async () => {
+          try {
+            // Request for microphone permission
+            const stream = await navigator.mediaDevices.getUserMedia({
+              audio: {
+                echoCancellation: false,
+                noiseSuppression: false,
+                autoGainControl: false,
+                channelCount: 2,
+                sampleRate: 96000,
+                sampleSize: 24,
+              },
+            });
 
-                // Request for GPS permission
-                await navigator.geolocation.getCurrentPosition(() => {});
+            // Request for GPS permission
+            await navigator.geolocation.getCurrentPosition(() => {});
 
-                // If both are successful
-                hasPermissions = true;
-                document.getElementById("startRecording").disabled = false;
+            // If both are successful
+            hasPermissions = true;
+            document.getElementById("startRecording").disabled = false;
 
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.ondataavailable = (event) => {
-                    audioChunks.push(event.data);
-                    if (mediaRecorder.state === "inactive") {
-                        postAudioChunks();
-                    }
-                };
-            } catch (error) {
-                console.error("Error requesting permissions:", error);
-            }
+            mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+            mediaRecorder.ondataavailable = (event) => {
+              audioChunks.push(event.data);
+              if (mediaRecorder.state === "inactive") {
+                postAudioChunks();
+              }
+            };
+          } catch (error) {
+            console.error("Error requesting permissions:", error);
+          }
         });
 
-        document.getElementById("startRecording").addEventListener("click", () => {
-            isRecording = true;
-            mediaRecorder.start();
-            document.getElementById("stopRecording").disabled = false;
-            
-            // Stop recording after 1s and post the data
-            
+      document
+        .getElementById("startRecording")
+        .addEventListener("click", () => {
+          isRecording = true;
+          mediaRecorder.start();
+          document.getElementById("stopRecording").disabled = false;
+
+          // Stop recording after 1s and post the data
         });
 
-        document.getElementById("stopRecording").addEventListener("click", () => {
-            isRecording = false;
-            mediaRecorder.stop();
-            setTimeout(() => {
-                mediaRecorder.stop();
-                document.getElementById("stopRecording").disabled = true;
-                document.getElementById("startRecording").disabled = false;
-            }, 1000);
-        });
+      document.getElementById("stopRecording").addEventListener("click", () => {
+        isRecording = false;
+        mediaRecorder.stop();
+        setTimeout(() => {
+          mediaRecorder.stop();
+          document.getElementById("stopRecording").disabled = true;
+          document.getElementById("startRecording").disabled = false;
+        }, 1000);
+      });
 
-        async function postAudioChunks() {
-            try {
-                const audioBlob = new Blob(audioChunks, {
-                    type: "audio/wav",
-                });
-                const formData = new FormData();
-                formData.append("audio", audioBlob);
-                await fetch("{{ngrok_url+'/audio'}}", {
-                    method: "POST",
-                    body: formData,
-                });
-                audioChunks = [];
-            } catch (error) {
-                console.error("Error posting audio:", error);
-            }
+      async function postAudioChunks() {
+        try {
+          const audioBlob = new Blob(audioChunks, {
+            type: "audio/webm",
+          });
+          const formData = new FormData();
+          formData.append("audio", audioBlob);
+          await fetch("{{ngrok_url+'/audio'}}", {
+            method: "POST",
+            body: formData,
+          });
+          audioChunks = [];
+        } catch (error) {
+          console.error("Error posting audio:", error);
         }
+      }
     </script>
-</body>
+  </body>
 </html>

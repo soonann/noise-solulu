@@ -40,7 +40,7 @@ def receive_audio():
     if audio_file:
         # Save or process the audio file as needed
         # For example, to save the file:
-        filepath = "path_where_you_want_to_save_the_file.wav"
+        filepath = "audio.webm"
         audio_file.save(filepath)
 
         return 'Audio received and saved', 200
