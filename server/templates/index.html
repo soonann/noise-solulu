@@ -18,9 +18,23 @@
         <!-- Add your content here -->
         {{ngrok_url}}
     </main>
+    <iframe src="{{ngrok2_url}}/d-solo/aad8cfed-0dca-4927-9b75-5f0b75dd0620/test2?orgId=1&from=1695470217061&to=1695491817061&theme=dark&panelId=1" width="450" height="200" frameborder="0"></iframe>
     <footer>
         <p>&copy; 2023 Your Company</p>
     </footer>
+    <!-- <script>
+        fetch("{{ngrok2_url}}/d-solo/aad8cfed-0dca-4927-9b75-5f0b75dd0620/test2?orgId=1&from=1695469692199&to=1695491292199&theme=dark&panelId=1", {
+            headers: {
+                'ngrok-skip-browser-warning': '1'
+            }
+        })
+        .then(resp => resp.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const iframe = document.getElementById('myiframe');
+            iframe.src = url;
+        });
+    </script> -->
     <!-- <script src="{{ url_for('static', filename='script.js') }}"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"

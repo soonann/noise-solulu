@@ -1,0 +1,9 @@
+authtoken:   # you can leave this out if you set the authtoken via command line
+
+tunnels:
+  tunnel1:
+    proto: http
+    addr: 6969
+  tunnel2:
+    proto: http
+    addr: 3000

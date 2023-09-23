@@ -8,17 +8,29 @@ import requests
 app = Flask(__name__)
 
 load_dotenv()
-NGROK_URL=os.getenv('NGROK_URL')
-PORT=os.getenv('PORT')
+HOST = "http://ngrok:4040"
+HOST2 =  "http://ngrok2:4040"
+PORT=os.getenv('FLASK_PORT')
+print(PORT)
 
 
 def getUrl():
-    return requests.get(NGROK_URL).json()['tunnels'][0]['public_url']
-    
+    tunnels = requests.get(os.path.join(HOST, "api/tunnels")).json()['tunnels']
+    url = [i for i in tunnels if 'https' in i['public_url']][0]['public_url']
+    return url
+
+def getUrl2():
+    tunnels = requests.get(os.path.join(HOST2, "api/tunnels")).json()['tunnels']
+    url = [i for i in tunnels if 'https' in i['public_url']][0]['public_url']
+    return url
+
 
 @app.route('/')
 def index():
-    return render_template('index.html',ngrok_url = getUrl())
+    url1 = getUrl()
+    url2 = getUrl2()
+    print(url1,url2)
+    return render_template('index.html',ngrok_url = url1, ngrok2_url = url2)
 
 @app.route('/phone')
 def phone():
@@ -56,4 +68,4 @@ def getReading():
     return jsonify({"message": "Data received successfully!"}),200
 
 if __name__ == '__main__':
-    app.run(port=PORT, debug=True)
+    app.run(host='0.0.0.0', port=PORT, debug=True)
