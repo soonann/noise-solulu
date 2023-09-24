@@ -9,7 +9,6 @@ app = Flask(__name__)
 
 load_dotenv()
 HOST = "http://ngrok:4040"
-HOST2 =  "http://ngrok2:4040"
 PORT=os.getenv('FLASK_PORT')
 print(PORT)
 
@@ -19,24 +18,20 @@ def getUrl():
     url = [i for i in tunnels if 'https' in i['public_url']][0]['public_url']
     return url
 
-def getUrl2():
-    tunnels = requests.get(os.path.join(HOST2, "api/tunnels")).json()['tunnels']
-    url = [i for i in tunnels if 'https' in i['public_url']][0]['public_url']
-    return url
+# @app.after_request
+# def apply_caching(response):
+    # response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    # return response
 
-
-@app.route('/')
+@app.route('/web')
 def index():
-    url1 = getUrl()
-    url2 = getUrl2()
-    print(url1,url2)
-    return render_template('index.html',ngrok_url = url1, ngrok2_url = url2)
+    return render_template('index.html')
 
-@app.route('/phone')
+@app.route('/web/phone')
 def phone():
-    return render_template('phone.html',ngrok_url = getUrl())
+    return render_template('phone.html')
 
-@app.route('/audio', methods=['POST'])
+@app.route('/web/audio', methods=['POST'])
 def receive_audio():
     # Check if the post request has the file part
     if 'audio' not in request.files:

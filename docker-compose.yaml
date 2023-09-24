@@ -1,70 +1,94 @@
 version: '3.8'
 services:
+
+  # grafana
   grafana:
+    user: root
     image: grafana/grafana-enterprise
     container_name: grafana
     restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=grafana
+      - GF_FEATURE_TOGGLES_ENABLE=publicDashboards
     ports:
-      - '${GRAFANA_PORT}:${GRAFANA_PORT}'
+      - ${GRAFANA_PORT}:${GRAFANA_PORT}
     volumes:
       - ./grafana/grafana_data:/var/lib/grafana
+      - ./grafana:/etc/grafana/provisioning/datasources
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
     networks:
       - iot_network
 
-  nginx:
-    image: nginx:latest
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - grafana
-    environment:
-      - NGINX_PORT=${NGINX_PORT}
-      - GRAFANA_PORT=${GRAFANA_PORT}
+  # prometheus
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
-      - "8080:80" # Change 8080 to any host port you want
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
     networks:
       - iot_network
 
+  # flask
   flask:
-    build: 
+    build:
       context: ./server
       dockerfile: Dockerfile.flask
+    container_name: flask
+    depends_on:
+      - ngrok
     environment:
       - FLASK_PORT=${FLASK_PORT}
+    volumes:
+      - ./server:/app
     ports:
-      - "${FLASK_PORT}:${FLASK_PORT}"
+      - ${FLASK_PORT}:${FLASK_PORT}
     networks:
       - iot_network
 
-  ngrok:
-    image: wernight/ngrok
+  # nginx
+  nginx:
+    image: nginx:latest
+    container_name: nginx
     depends_on:
       - flask
-    command: /bin/sh -c "ngrok authtoken $$NGROK_TOKEN && ngrok http flask:$$FLASK_PORT"
+      - grafana
+      - prometheus
     environment:
-      - NGROK_TOKEN=${NGROK_TOKEN1}
-      - FLASK_PORT=${FLASK_PORT}
+      - NGROK_DOMAIN=${NGROK_DOMAIN}
+    volumes:
+      - ./nginx/nginx.conf.template:/etc/nginx/conf.d/nginx.conf.template
+    command: /bin/bash -c 'envsubst "\$NGROK_DOMAIN" < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g "daemon off;"'
     ports:
-      - "5050:4040"
+      - 8080:80
     networks:
       - iot_network
 
-  ngrok2:
+  # ngrok
+  ngrok:
     image: wernight/ngrok
-    depends_on:
-      - grafana
-    command: /bin/sh -c "ngrok authtoken $$NGROK_TOKEN && ngrok http nginx:$$NGINX_PORT"
+    container_name: ngrok
+    command: /bin/sh -c "ngrok authtoken $$NGROK_TOKEN && ngrok http -hostname=$$NGROK_DOMAIN nginx:$$NGINX_PORT"
     environment:
-      - NGROK_TOKEN=${NGROK_TOKEN2}
+      - NGROK_TOKEN=${NGROK_TOKEN}
+      - NGROK_DOMAIN=${NGROK_DOMAIN}
       - NGINX_PORT=${NGINX_PORT}
     ports:
-      - "4040:4040"
+      - 4040:4040
     networks:
       - iot_network
-
-# volumes:
-#   grafana_data: {}
 
 networks:
   iot_network:
+
+
+volumes:
+  prom_data:
+
+
