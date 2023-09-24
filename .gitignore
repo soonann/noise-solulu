@@ -1,1 +1,11 @@
+# flask venv
 venv
+
+# uploaded files
+*.webm
+
+# .env
+.env
+
+# nix shell
+shell.nix
