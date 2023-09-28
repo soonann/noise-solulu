@@ -26,6 +26,7 @@ vim .env
 ```
 
 3. Configure the `.env file with your own Ngrok Credentials`
+
 You can find your `NGROK_TOKEN` on your account's dashboard
 ![](./docs/auth-token.jpg)
 
@@ -33,5 +34,14 @@ For the `NGROK_DOMAIN`, you will need to create a custom domain on your account'
 ![](./docs/custom-domains.jpg)
 ![](./docs/created-domains.jpg)
 
+4. Start/Build the containers
 
+To start or build the containers, you can use the following command:
+```bash
+# start docker compose and build required images
+docker compose up --build
+```
 
+5. Accessing the application
+
+After starting the application with `docker compose`, the application will be accessible via `localhost:8080` or your `NGROK_DOMAIN`
