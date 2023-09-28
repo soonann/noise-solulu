@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjust Aerogel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #bar-container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        #adjustable-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            position: relative;
+        }
+
+        #slider {
+            width: 20px;
+            height: 20px;
+            background-color: #007BFF;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Adjust Aerogel</h1>
+    <div id="bar-container">
+        <div id="adjustable-bar">
+            <div id="slider"></div>
+        </div>
+        <p id="current-value">Current Value: 0</p>
+    </div>
+
+    <script>
+        const adjustableBar = document.getElementById('adjustable-bar');
+        const slider = document.getElementById('slider');
+        const currentValue = document.getElementById('current-value');
+
+        let value = 1; // Initial value
+
+        // Event listener for moving the slider
+        slider.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+
+            // Track mouse movement for dragging
+            document.addEventListener('mousemove', adjustBar);
+            document.addEventListener('mouseup', stopAdjusting);
+        });
+
+        // Function to adjust the bar's width and display value
+        function adjustBar(e) {
+            const barWidth = adjustableBar.offsetWidth;
+            const sliderWidth = slider.offsetWidth;
+            const mouseX = e.clientX - adjustableBar.getBoundingClientRect().left;
+            let newValue = Math.floor((mouseX / (barWidth - sliderWidth)) * 100);
+
+            // Keep the value within the range of 0 to 100
+            if (newValue < 0) {
+                newValue = 0;
+            } else if (newValue > 100) {
+                newValue = 100;
+            }
+
+            // Update the slider position and value display
+            slider.style.left = `${(newValue - 1) * (barWidth - sliderWidth) / 99}px`;
+            currentValue.textContent = `Current Value: ${newValue}`;
+        }
+
+        // Event listener to stop adjusting the bar
+        function stopAdjusting() {
+            document.removeEventListener('mousemove', adjustBar);
+            document.removeEventListener('mouseup', stopAdjusting);
+        }
+    </script>
+</body>
+</html>
