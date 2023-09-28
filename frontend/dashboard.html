@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafana Analytics Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .iframe-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio (change as needed) */
+            height: 0;
+            overflow: hidden;
+        }
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Grafana Analytics Dashboard</h1>
+        <div class="iframe-container">
+            <iframe src="https://your-grafana-url1.com"></iframe>
+        </div>
+        <div class="iframe-container">
+            <iframe src="https://your-grafana-url2.com"></iframe>
+        </div>
+        <div class="iframe-container">
+            <iframe src="https://your-grafana-url3.com"></iframe>
+        </div>
+        <div class="button-container">
+            <button class="button">Click Me</button>
+        </div>
+    </div>
+</body>
+</html>
