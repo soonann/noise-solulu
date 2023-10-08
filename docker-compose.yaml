@@ -41,12 +41,15 @@ services:
       context: ./server
       dockerfile: Dockerfile.flask
     container_name: flask
+    devices:
+      - "${DEVICE_PATH}:${DEVICE_PATH}:rwm"
     depends_on:
       - ngrok
     environment:
       - FLASK_PORT=${FLASK_PORT}
     volumes:
       - ./server:/app
+      #- "${DEVICE_PATH}:${DEVICE_PATH}"
     ports:
       - ${FLASK_PORT}:${FLASK_PORT}
     networks:

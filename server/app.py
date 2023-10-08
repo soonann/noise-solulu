@@ -4,12 +4,14 @@ from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 import os
 import requests
+import serial
 
 app = Flask(__name__)
 
 load_dotenv()
 HOST = "http://ngrok:4040"
 PORT=os.getenv('FLASK_PORT')
+DEVICE_PATH = os.getenv("DEVICE_PATH")
 print(PORT)
 
 
@@ -59,6 +61,22 @@ def getReading():
     # Convert the request data to JSON (assuming it's sent as JSON)
     data = request.json
     print("Received data:", data)
+
+    return jsonify({"message": "Data received successfully!"}),200
+
+@app.route('/web/motor',methods = ["POST"])
+def setMotorAngle():
+    # Convert the request data to JSON (assuming it's sent as JSON)
+    data = request.json
+    print("Received data:", data)
+
+    ser = serial.Serial(DEVICE_PATH, 9600)  # open serial port
+
+    # ser.open()
+    print(ser.name)         # check which port was really used
+
+    ser.write(b'somestr')     # write a string
+    ser.close()             # close port
 
     return jsonify({"message": "Data received successfully!"}),200
 
