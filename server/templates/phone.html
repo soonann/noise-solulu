@@ -95,10 +95,16 @@
               });
               const formData = new FormData();
               formData.append("audio", audioBlob);
-              await fetch("{{ngrok_url+'/web/audio'}}", {
+              fetch("{{ngrok_url+'/web/audio'}}", {
                   method: "POST",
                   body: formData,
-              });
+              }).then(response => response.json())
+                .then(object => {
+                    if (object) {
+                        console.log(object);
+                    }
+                })
+
               audioChunks = [];
           } catch (error) {
               console.error("Error posting audio:", error);

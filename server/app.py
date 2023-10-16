@@ -2,13 +2,25 @@
 
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
-from helper import stitch_last_three_audio
+from helper import stitch_audio
+from NoiseAI import *
+import logging
 import os
 import requests
 import serial
 import datetime
 
 app = Flask(__name__)
+
+
+app.logger.setLevel(logging.DEBUG)  # Set the log level you want
+
+# Log to a file
+handler = logging.FileHandler('flask.log')
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+app.logger.addHandler(handler)
 
 load_dotenv()
 HOST = "http://ngrok:4040"
@@ -28,6 +40,12 @@ def getUrl():
     # response.headers["X-Frame-Options"] = "SAMEORIGIN"
     # return response
 
+@app.errorhandler(Exception)
+def handle_exception(e):
+    app.logger.error("Unhandled Exception: %s", (e,))
+    return {"error":"Internal Server Error"}, 500
+
+
 @app.route('/web')
 def index():
     return render_template('index.html',ngrok_url=getUrl())
@@ -38,7 +56,7 @@ def phone():
     
 @app.route('/web/test')
 def test():
-    stitch_last_three_audio("./audio")
+    stitch_audio("./audio")
     return {},200
 
 
@@ -59,11 +77,16 @@ def receive_audio():
         # Save or process the audio file as needed
         # For example, to save the file:
         now = datetime.datetime.now()
-        filename = './audio/'+now.strftime('%Y%m%d_%H%M%S')+'.webm'
+        filename = './audio/'+now.strftime('%Y%m%d%H%M%S')+'.webm'
         # filepath = "audio.webm"
         audio_file.save(filename)
 
-        return 'Audio received and saved', 200
+        combined_filename = stitch_audio("./audio")
+        app.logger.info(combined_filename)
+        
+        prediction = predict(combined_filename,app.logger)
+
+        return prediction, 200
 
     return 'Unknown error', 500
 
