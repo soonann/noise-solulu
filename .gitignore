@@ -9,3 +9,8 @@ venv
 
 # nix shell
 shell.nix
+
+server/audio
+
+*.wav
+*.webm
