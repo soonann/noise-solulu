@@ -2,9 +2,11 @@
 
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
+from helper import stitch_last_three_audio
 import os
 import requests
 import serial
+import datetime
 
 app = Flask(__name__)
 
@@ -18,6 +20,7 @@ print(PORT)
 def getUrl():
     tunnels = requests.get(os.path.join(HOST, "api/tunnels")).json()['tunnels']
     url = [i for i in tunnels if 'https' in i['public_url']][0]['public_url']
+    url = url if "https" in url else url.repalce("http","https")
     return url
 
 # @app.after_request
@@ -27,11 +30,17 @@ def getUrl():
 
 @app.route('/web')
 def index():
-    return render_template('index.html')
+    return render_template('index.html',ngrok_url=getUrl())
 
 @app.route('/web/phone')
 def phone():
-    return render_template('phone.html')
+    return render_template('phone.html',ngrok_url=getUrl())
+    
+@app.route('/web/test')
+def test():
+    stitch_last_three_audio("./audio")
+    return {},200
+
 
 @app.route('/web/audio', methods=['POST'])
 def receive_audio():
@@ -49,8 +58,10 @@ def receive_audio():
     if audio_file:
         # Save or process the audio file as needed
         # For example, to save the file:
-        filepath = "audio.webm"
-        audio_file.save(filepath)
+        now = datetime.datetime.now()
+        filename = './audio/'+now.strftime('%Y%m%d_%H%M%S')+'.webm'
+        # filepath = "audio.webm"
+        audio_file.save(filename)
 
         return 'Audio received and saved', 200
 

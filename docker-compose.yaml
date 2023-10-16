@@ -41,10 +41,10 @@ services:
       context: ./server
       dockerfile: Dockerfile.flask
     container_name: flask
-    devices:
-      - "${DEVICE_PATH}:${DEVICE_PATH}:rwm"
-    depends_on:
-      - ngrok
+    # devices:
+    #   - "${DEVICE_PATH}:${DEVICE_PATH}:rwm"
+    # depends_on:
+    #   - ngrok
     environment:
       - FLASK_PORT=${FLASK_PORT}
     volumes:
@@ -59,10 +59,10 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
-    depends_on:
-      - flask
-      - grafana
-      - prometheus
+    # depends_on:
+    #   - flask
+    #   - grafana
+    #   - prometheus
     environment:
       - NGROK_DOMAIN=${NGROK_DOMAIN}
     volumes:
