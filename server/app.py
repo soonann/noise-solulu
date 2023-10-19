@@ -109,7 +109,7 @@ def setMotorAngle():
     # ser.open()
     print(ser.name)         # check which port was really used
 
-    ser.write(b'somestr')     # write a string
+    ser.write(b'360')     # write a string
     ser.close()             # close port
 
     return jsonify({"message": "Data received successfully!"}),200

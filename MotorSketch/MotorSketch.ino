@@ -4,6 +4,7 @@ String inputString = "";         // a String to hold incoming data
 bool stringComplete = false;  // whether the string is complete
 Servo myservo;
 int serIn;
+int dState = 0;
 
 void setup() {
   // initialize serial:
@@ -23,23 +24,40 @@ void loop () {
     Serial.print("Arduino heard you say: ");
     
     //keep reading and printing from serial untill there are bytes in the serial buffer
-     while (Serial.available() > 0){
-        serIn = Serial.read();  //read Serial        
-        Serial.print(serIn);  //prints the character just read
+     while (Serial.available()){
+        
+        int val = Serial.parseInt();  //read Serial and parse as int, will return 0 when it receives nothing anymore     
+        if (val == 0){
+          break;
+        }
+        serIn = val;
+        Serial.println(serIn);  //prints the character just read
      }
      
     //the serial buffer is over just go to the line (or pass your favorite stop char)               
     Serial.println();
-    spin();
+    spin(serIn);
   }
   
   //slows down the visualization in the terminal
   delay(1000);
 }
 
-void spin(){
-  myservo.write(45); // rotate the motor counter-clockwise
-  delay(5000); // keep rotating for 5 seconds (5000 milliseconds)
+void spin(int degree){
+  Serial.println(degree);
+  if (dState == degree){
+    return;
+  }
 
-  myservo.write(90); // stop the motor
+  int diff = ((dState + degree) % 360);
+  Serial.println(diff);
+  
+  if (degree > 0){
+    myservo.write(180);
+  }
+  else {
+    myservo.write(0);
+  }
+  delay(0.116667 * diff);
+  myservo.write(90);
 }
