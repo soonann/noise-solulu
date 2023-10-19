@@ -51,6 +51,7 @@ services:
     #   - ngrok
     environment:
       - FLASK_PORT=${FLASK_PORT}
+      - DEVICE_PATH=${DEVICE_PATH}
     volumes:
       - ./server:/app
       - "${DEVICE_PATH}:${DEVICE_PATH}"
