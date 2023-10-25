@@ -30,8 +30,8 @@ services:
       - 9090:9090
     restart: unless-stopped
     volumes:
-      - ./prometheus:/etc/prometheus
-      - prom_data:/prometheus
+      - ./prometheus/config:/etc/prometheus
+      - ./prometheus/prometheus_data:/prometheus
     networks:
       - iot_network
 
@@ -39,22 +39,16 @@ services:
   flask:
     user: root
     privileged: true
-    #device_cgroup_rules:
-      #- "c 166:* rmw"
     build:
       context: ./server
       dockerfile: Dockerfile.flask
     container_name: flask
-    #devices:
-      #- "${DEVICE_PATH}:${DEVICE_PATH}:rwm"
-    # depends_on:
-    #   - ngrok
     environment:
       - FLASK_PORT=${FLASK_PORT}
       - DEVICE_PATH=${DEVICE_PATH}
     volumes:
       - ./server:/app
-      - "${DEVICE_PATH}:${DEVICE_PATH}"
+      #- "${DEVICE_PATH}:${DEVICE_PATH}"
     ports:
       - ${FLASK_PORT}:${FLASK_PORT}
     networks:
@@ -62,12 +56,12 @@ services:
 
   # nginx
   nginx:
+    depends_on:
+      - grafana
+      - flask
+      - ngrok
     image: nginx:latest
     container_name: nginx
-    # depends_on:
-    #   - flask
-    #   - grafana
-    #   - prometheus
     environment:
       - NGROK_DOMAIN=${NGROK_DOMAIN}
     volumes:
@@ -94,9 +88,4 @@ services:
 
 networks:
   iot_network:
-
-
-volumes:
-  prom_data:
-
 

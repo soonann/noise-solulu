@@ -1,12 +1,7 @@
-FROM python:3.10-slim-bullseye
+FROM python:3.10-slim
 
 # Set working directory
 WORKDIR /app
-
-RUN apt update
-RUN apt install procps curl -y
-
-RUN alias ll='ls -alhF'
 
 # Copy the application and the requirements file
 COPY . /app/

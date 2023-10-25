@@ -67,7 +67,6 @@ def receive_audio():
         return 'No file part', 400
 
     audio_file = request.files['audio']
-    
     # If the user does not select a file, the browser might
     # submit an empty file without a filename.
     if audio_file.filename == '':
@@ -83,12 +82,13 @@ def receive_audio():
 
         combined_filename = stitch_audio("./audio")
         app.logger.info(combined_filename)
-        
-        prediction = predict(combined_filename,app.logger)
+        prediction = predict(combined_filename, app.logger)
+        if prediction is None:
+            return "Unknown", 200
 
         return prediction, 200
 
-    return 'Unknown error', 500
+    return 'No file found', 500
 
 @app.route('/webhook',methods = ["POST"])
 def getReading():

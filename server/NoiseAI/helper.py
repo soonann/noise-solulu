@@ -117,7 +117,7 @@ def predict(file,logger):
         prediction = interpreter.get_tensor(output_index)
 
         # Get the predicted class label
-        predicted_label = int(np.argmax(prediction))
+        predicted_label = np.argmax(prediction)
         predicted_class = label_dict.get(predicted_label, 'Unknown')
         
         response_data = {
