@@ -1,10 +1,11 @@
 #include <Servo.h>
 
-String inputString = "";         // a String to hold incoming data
+String inputString = ""; // a String to hold incoming data
 bool stringComplete = false;  // whether the string is complete
 Servo myservo;
 int serIn;
-int dState = 0;
+double TIME_PER_DEGREE = 380 / 180.0; // to calculate how long it will take for 1 degree of rotation
+int currDeg = 0;
 
 void setup() {
   // initialize serial:
@@ -43,21 +44,30 @@ void loop () {
   delay(1000);
 }
 
-void spin(int degree){
-  Serial.println(degree);
-  if (dState == degree){
+void spin(int deg){
+
+  // if the degree is already what we want, exit
+  if (deg == currDeg) {
     return;
   }
 
-  int diff = ((dState + degree) % 360);
-  Serial.println(diff);
+  // otherwise calculate how long it will need to turn from curr state to desired state
+
+  double duration = TIME_PER_DEGREE;
+  deg = deg % 360;
+  Serial.println(deg);
+
+  // check which direction to turn
+  if (currDeg > deg){
+    duration = (duration * (currDeg - deg));
+    myservo.write(180); // anti-clockwise
+    delay(duration);
+  } else {
+    duration = (duration * (deg - currDeg));
+    myservo.write(0); // clockwise
+    delay(duration);
+  }
   
-  if (degree > 0){
-    myservo.write(180);
-  }
-  else {
-    myservo.write(0);
-  }
-  delay(0.116667 * diff);
-  myservo.write(90);
+  myservo.write(90); // stop turning
+  currDeg = deg;
 }
