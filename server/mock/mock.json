@@ -1,0 +1,702 @@
+[
+  {
+    "class": "street_music",
+    "decibels": 60.55,
+    "lat": 1.432615,
+    "lng": 103.86713,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "street_music",
+    "decibels": 53.43,
+    "lat": 1.422124,
+    "lng": 103.614531,
+    "timestamp": 1698135560
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 84.94,
+    "lat": 1.338213,
+    "lng": 103.725791,
+    "timestamp": 1698049160
+  },
+  {
+    "class": "engine_idling",
+    "decibels": 60.35,
+    "lat": 1.379879,
+    "lng": 103.757826,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "siren",
+    "decibels": 78.21,
+    "lat": 1.400751,
+    "lng": 103.611496,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "dog_bark",
+    "decibels": 81.09,
+    "lat": 1.386097,
+    "lng": 103.605502,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "car_horn",
+    "decibels": 81.01,
+    "lat": 1.276801,
+    "lng": 103.737577,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "drilling",
+    "decibels": 74.93,
+    "lat": 1.489146,
+    "lng": 103.699573,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "engine_idling",
+    "decibels": 66.7,
+    "lat": 1.49443,
+    "lng": 103.811548,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "gun_shot",
+    "decibels": 106.98,
+    "lat": 1.267637,
+    "lng": 103.996347,
+    "timestamp": 1698049160
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 52.88,
+    "lat": 1.219318,
+    "lng": 103.859503,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "siren",
+    "decibels": 55.78,
+    "lat": 1.292287,
+    "lng": 103.929863,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "dog_bark",
+    "decibels": 94.94,
+    "lat": 1.307662,
+    "lng": 103.929595,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "air_conditioner",
+    "decibels": 65.94,
+    "lat": 1.43836,
+    "lng": 103.686284,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "air_conditioner",
+    "decibels": 94.49,
+    "lat": 1.37531,
+    "lng": 103.805084,
+    "timestamp": 1698135560
+  },
+  {
+    "class": "dog_bark",
+    "decibels": 53.27,
+    "lat": 1.254567,
+    "lng": 103.941634,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "air_conditioner",
+    "decibels": 101.87,
+    "lat": 1.469225,
+    "lng": 103.603277,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "street_music",
+    "decibels": 72.19,
+    "lat": 1.203789,
+    "lng": 103.708026,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "engine_idling",
+    "decibels": 60.53,
+    "lat": 1.344653,
+    "lng": 103.83897,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "children_playing",
+    "decibels": 79.7,
+    "lat": 1.365328,
+    "lng": 103.727429,
+    "timestamp": 1698049160
+  },
+  {
+    "class": "street_music",
+    "decibels": 57.95,
+    "lat": 1.393321,
+    "lng": 103.708693,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "street_music",
+    "decibels": 81.49,
+    "lat": 1.404333,
+    "lng": 103.612921,
+    "timestamp": 1698049160
+  },
+  {
+    "class": "street_music",
+    "decibels": 102.3,
+    "lat": 1.386323,
+    "lng": 103.720254,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "children_playing",
+    "decibels": 104.27,
+    "lat": 1.312746,
+    "lng": 103.707662,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "drilling",
+    "decibels": 63.4,
+    "lat": 1.203726,
+    "lng": 103.925253,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "children_playing",
+    "decibels": 90.1,
+    "lat": 1.460247,
+    "lng": 103.988823,
+    "timestamp": 1698049160
+  },
+  {
+    "class": "siren",
+    "decibels": 75.01,
+    "lat": 1.212208,
+    "lng": 103.824391,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 85.96,
+    "lat": 1.250573,
+    "lng": 103.696098,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 62.4,
+    "lat": 1.472152,
+    "lng": 103.837296,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "siren",
+    "decibels": 87.19,
+    "lat": 1.4229,
+    "lng": 103.648167,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "dog_bark",
+    "decibels": 77.55,
+    "lat": 1.268291,
+    "lng": 103.605803,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "engine_idling",
+    "decibels": 66.52,
+    "lat": 1.419592,
+    "lng": 103.651802,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "siren",
+    "decibels": 91.27,
+    "lat": 1.442778,
+    "lng": 103.775104,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 96.27,
+    "lat": 1.273542,
+    "lng": 103.659841,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "air_conditioner",
+    "decibels": 95.89,
+    "lat": 1.247057,
+    "lng": 103.802723,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "car_horn",
+    "decibels": 109.9,
+    "lat": 1.205283,
+    "lng": 103.849684,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "engine_idling",
+    "decibels": 91.42,
+    "lat": 1.437653,
+    "lng": 103.861777,
+    "timestamp": 1698135560
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 100.97,
+    "lat": 1.255841,
+    "lng": 103.6498,
+    "timestamp": 1698049160
+  },
+  {
+    "class": "children_playing",
+    "decibels": 54.17,
+    "lat": 1.292955,
+    "lng": 103.82221,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 64.31,
+    "lat": 1.429625,
+    "lng": 103.833803,
+    "timestamp": 1698135560
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 106.28,
+    "lat": 1.344466,
+    "lng": 103.861927,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "drilling",
+    "decibels": 51.67,
+    "lat": 1.396422,
+    "lng": 103.673918,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "gun_shot",
+    "decibels": 79.34,
+    "lat": 1.472719,
+    "lng": 103.694347,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "drilling",
+    "decibels": 51.01,
+    "lat": 1.448429,
+    "lng": 103.74685,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "dog_bark",
+    "decibels": 74.5,
+    "lat": 1.42895,
+    "lng": 103.680664,
+    "timestamp": 1698135560
+  },
+  {
+    "class": "children_playing",
+    "decibels": 108.09,
+    "lat": 1.308972,
+    "lng": 103.799738,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "drilling",
+    "decibels": 107.01,
+    "lat": 1.407297,
+    "lng": 103.682375,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "air_conditioner",
+    "decibels": 93.0,
+    "lat": 1.497407,
+    "lng": 103.613422,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "gun_shot",
+    "decibels": 57.15,
+    "lat": 1.439152,
+    "lng": 103.617084,
+    "timestamp": 1698049160
+  },
+  {
+    "class": "car_horn",
+    "decibels": 74.77,
+    "lat": 1.4185,
+    "lng": 103.870388,
+    "timestamp": 1698049160
+  },
+  {
+    "class": "car_horn",
+    "decibels": 71.32,
+    "lat": 1.336128,
+    "lng": 103.789185,
+    "timestamp": 1698135560
+  },
+  {
+    "class": "car_horn",
+    "decibels": 50.65,
+    "lat": 1.263466,
+    "lng": 103.63794,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "car_horn",
+    "decibels": 63.34,
+    "lat": 1.366685,
+    "lng": 103.914437,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "dog_bark",
+    "decibels": 102.3,
+    "lat": 1.205204,
+    "lng": 103.80813,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "drilling",
+    "decibels": 72.58,
+    "lat": 1.327121,
+    "lng": 103.636037,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "children_playing",
+    "decibels": 72.65,
+    "lat": 1.219836,
+    "lng": 103.676534,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "gun_shot",
+    "decibels": 105.67,
+    "lat": 1.460493,
+    "lng": 103.972304,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "gun_shot",
+    "decibels": 51.8,
+    "lat": 1.3756,
+    "lng": 103.770705,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "car_horn",
+    "decibels": 70.95,
+    "lat": 1.325764,
+    "lng": 103.868777,
+    "timestamp": 1698135560
+  },
+  {
+    "class": "siren",
+    "decibels": 89.55,
+    "lat": 1.331122,
+    "lng": 103.768861,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "siren",
+    "decibels": 62.16,
+    "lat": 1.435475,
+    "lng": 103.611301,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 97.64,
+    "lat": 1.287624,
+    "lng": 103.896708,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "siren",
+    "decibels": 109.96,
+    "lat": 1.368835,
+    "lng": 103.644964,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "car_horn",
+    "decibels": 76.14,
+    "lat": 1.485206,
+    "lng": 103.699958,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "gun_shot",
+    "decibels": 51.24,
+    "lat": 1.401093,
+    "lng": 103.753604,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "engine_idling",
+    "decibels": 92.02,
+    "lat": 1.402788,
+    "lng": 103.612563,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "gun_shot",
+    "decibels": 103.12,
+    "lat": 1.358872,
+    "lng": 103.975273,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "car_horn",
+    "decibels": 109.81,
+    "lat": 1.35265,
+    "lng": 103.745796,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "car_horn",
+    "decibels": 63.61,
+    "lat": 1.311984,
+    "lng": 103.78794,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "car_horn",
+    "decibels": 59.0,
+    "lat": 1.246842,
+    "lng": 103.856161,
+    "timestamp": 1698049160
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 76.66,
+    "lat": 1.408563,
+    "lng": 103.636539,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 100.26,
+    "lat": 1.388484,
+    "lng": 103.924368,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "street_music",
+    "decibels": 75.87,
+    "lat": 1.353545,
+    "lng": 103.865635,
+    "timestamp": 1698135560
+  },
+  {
+    "class": "car_horn",
+    "decibels": 84.19,
+    "lat": 1.451499,
+    "lng": 103.770046,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "car_horn",
+    "decibels": 65.72,
+    "lat": 1.414954,
+    "lng": 103.778706,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "children_playing",
+    "decibels": 75.8,
+    "lat": 1.441292,
+    "lng": 103.75914,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "dog_bark",
+    "decibels": 86.29,
+    "lat": 1.261672,
+    "lng": 103.806221,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "siren",
+    "decibels": 78.54,
+    "lat": 1.458722,
+    "lng": 103.737251,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "siren",
+    "decibels": 88.65,
+    "lat": 1.257116,
+    "lng": 103.8013,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 75.21,
+    "lat": 1.337999,
+    "lng": 103.749393,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "drilling",
+    "decibels": 66.94,
+    "lat": 1.220386,
+    "lng": 103.966367,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "gun_shot",
+    "decibels": 79.51,
+    "lat": 1.498728,
+    "lng": 103.708048,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "dog_bark",
+    "decibels": 64.05,
+    "lat": 1.368046,
+    "lng": 103.669282,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "dog_bark",
+    "decibels": 73.48,
+    "lat": 1.275539,
+    "lng": 103.857942,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "air_conditioner",
+    "decibels": 86.33,
+    "lat": 1.286395,
+    "lng": 103.66615,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 56.38,
+    "lat": 1.277759,
+    "lng": 103.836232,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "drilling",
+    "decibels": 52.6,
+    "lat": 1.310879,
+    "lng": 103.920622,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "air_conditioner",
+    "decibels": 102.98,
+    "lat": 1.37301,
+    "lng": 103.920576,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 107.05,
+    "lat": 1.437648,
+    "lng": 103.870119,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "air_conditioner",
+    "decibels": 63.56,
+    "lat": 1.299092,
+    "lng": 103.655711,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "engine_idling",
+    "decibels": 105.54,
+    "lat": 1.443869,
+    "lng": 103.901476,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "street_music",
+    "decibels": 62.18,
+    "lat": 1.28675,
+    "lng": 103.839055,
+    "timestamp": 1698049160
+  },
+  {
+    "class": "children_playing",
+    "decibels": 108.85,
+    "lat": 1.260094,
+    "lng": 103.914324,
+    "timestamp": 1698221960
+  },
+  {
+    "class": "gun_shot",
+    "decibels": 57.52,
+    "lat": 1.441832,
+    "lng": 103.95579,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "dog_bark",
+    "decibels": 53.31,
+    "lat": 1.479204,
+    "lng": 103.676126,
+    "timestamp": 1697789960
+  },
+  {
+    "class": "children_playing",
+    "decibels": 93.77,
+    "lat": 1.2642,
+    "lng": 103.706197,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "dog_bark",
+    "decibels": 97.55,
+    "lat": 1.416711,
+    "lng": 103.693185,
+    "timestamp": 1697703560
+  },
+  {
+    "class": "car_horn",
+    "decibels": 79.85,
+    "lat": 1.383769,
+    "lng": 103.687169,
+    "timestamp": 1697876360
+  },
+  {
+    "class": "drilling",
+    "decibels": 91.37,
+    "lat": 1.272048,
+    "lng": 103.918258,
+    "timestamp": 1697962760
+  },
+  {
+    "class": "jackhammer",
+    "decibels": 74.17,
+    "lat": 1.248704,
+    "lng": 103.896934,
+    "timestamp": 1697962760
+  }
+]

@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 from helper import stitch_audio
 from NoiseAI import *
+import json
 import logging
 import os
 import requests
@@ -96,15 +97,23 @@ def receive_audio():
 
 @app.route('/web/grafana', methods=['GET'])
 def exporter():
-    # response_data = {
-    # 'label': predicted_label,
-    # 'class': predicted_class,
-    # 'probabilities': {label: float(prob) for label, prob in zip(label_dict.values(), prediction[0])},
-    # 'decibels': decibels.tolist()
-    # }
+    with open('./mock/mock.json', 'r') as json_file:
+        data = json.load(json_file)
+        
+        # Return the JSON data as a response
+        return jsonify(data), 200
 
-    return jsonify({}), 200
+    return jsonify({}), 500
 
+@app.route('/web/grafana/heatmap', methods=['GET'])
+def heatmap():
+    response_data = {
+        'id': 1,
+        'class': 'dog_bark',
+        'decibels': 10,
+    }
+
+    return jsonify([response_data]), 200
 
 @app.route('/webhook', methods=["POST"])
 def getReading():
