@@ -12,19 +12,19 @@ import datetime
 
 app = Flask(__name__)
 
-
 app.logger.setLevel(logging.DEBUG)  # Set the log level you want
 
 # Log to a file
 handler = logging.FileHandler('flask.log')
 handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 
 load_dotenv()
 HOST = "http://ngrok:4040"
-PORT=os.getenv('FLASK_PORT')
+PORT = os.getenv('FLASK_PORT')
 DEVICE_PATH = os.getenv("DEVICE_PATH")
 print(PORT)
 
@@ -32,32 +32,35 @@ print(PORT)
 def getUrl():
     tunnels = requests.get(os.path.join(HOST, "api/tunnels")).json()['tunnels']
     url = [i for i in tunnels if 'https' in i['public_url']][0]['public_url']
-    url = url if "https" in url else url.repalce("http","https")
+    url = url if "https" in url else url.repalce("http", "https")
     return url
+
 
 # @app.after_request
 # def apply_caching(response):
-    # response.headers["X-Frame-Options"] = "SAMEORIGIN"
-    # return response
+# response.headers["X-Frame-Options"] = "SAMEORIGIN"
+# return response
+
 
 @app.errorhandler(Exception)
 def handle_exception(e):
-    app.logger.error("Unhandled Exception: %s", (e,))
-    return {"error":"Internal Server Error"}, 500
+    app.logger.error("Unhandled Exception: %s", (e, ))
+    return {"error": "Internal Server Error"}, 500
 
 
 @app.route('/web')
 def index():
-    return render_template('index.html',ngrok_url=getUrl())
+    return render_template('index.html', ngrok_url=getUrl())
+
 
 @app.route('/web/phone')
 def phone():
-    return render_template('phone.html',ngrok_url=getUrl())
-    
+    return render_template('phone.html', ngrok_url=getUrl())
+
+
 @app.route('/web/test')
 def test():
     stitch_audio("./audio")
-    return {},200
 
 
 @app.route('/web/audio', methods=['POST'])
@@ -76,7 +79,7 @@ def receive_audio():
         # Save or process the audio file as needed
         # For example, to save the file:
         now = datetime.datetime.now()
-        filename = './audio/'+now.strftime('%Y%m%d%H%M%S')+'.webm'
+        filename = './audio/' + now.strftime('%Y%m%d%H%M%S') + '.webm'
         # filepath = "audio.webm"
         audio_file.save(filename)
 
@@ -90,29 +93,40 @@ def receive_audio():
 
     return 'No file found', 500
 
-@app.route('/webhook',methods = ["POST"])
+
+@app.route('/web/grafana', methods=['GET'])
+def exporter():
+    # response_data = {
+    # 'label': predicted_label,
+    # 'class': predicted_class,
+    # 'probabilities': {label: float(prob) for label, prob in zip(label_dict.values(), prediction[0])},
+    # 'decibels': decibels.tolist()
+    # }
+
+    return jsonify({}), 200
+
+
+@app.route('/webhook', methods=["POST"])
 def getReading():
     # Convert the request data to JSON (assuming it's sent as JSON)
     data = request.json
     print("Received data:", data)
 
-    return jsonify({"message": "Data received successfully!"}),200
+    return jsonify({"message": "Data received successfully!"}), 200
 
-@app.route('/web/motor',methods = ["POST"])
+
+@app.route('/web/motor', methods=["POST"])
 def setMotorAngle():
-    # Convert the request data to JSON (assuming it's sent as JSON)
     data = request.json
-    print("Received data:", data)
+    if data["degree"] is None:
+        return jsonify({"message": "Invalid input"}, 400)
 
     ser = serial.Serial(DEVICE_PATH, 9600)  # open serial port
+    ser.write(f'{data["degree"]}'.encode())  # write a string
+    ser.close()  # close port
 
-    # ser.open()
-    print(ser.name)         # check which port was really used
+    return jsonify({"message": "Data received successfully!"}), 200
 
-    ser.write(b'360')     # write a string
-    ser.close()             # close port
-
-    return jsonify({"message": "Data received successfully!"}),200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=PORT, debug=True)

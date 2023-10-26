@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./prometheus/config:/etc/prometheus
-      - ./prometheus/prometheus_data:/prometheus
+      #- ./prometheus/prometheus_data:/prometheus
     networks:
       - iot_network
 
@@ -48,7 +48,7 @@ services:
       - DEVICE_PATH=${DEVICE_PATH}
     volumes:
       - ./server:/app
-      #- "${DEVICE_PATH}:${DEVICE_PATH}"
+      - "${DEVICE_PATH}:${DEVICE_PATH}"
     ports:
       - ${FLASK_PORT}:${FLASK_PORT}
     networks:
