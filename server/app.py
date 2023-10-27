@@ -97,11 +97,10 @@ def receive_audio():
 
 @app.route('/web/grafana', methods=['GET'])
 def exporter():
-    with open('./mock/mock.json', 'r') as json_file:
+    with open('./mock/mock-0.json', 'r') as json_file:
         data = json.load(json_file)
-        
         # Return the JSON data as a response
-        return jsonify(data), 200
+        return jsonify([data]), 200
 
     return jsonify({}), 500
 
