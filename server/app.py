@@ -4,6 +4,10 @@ from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 from helper import stitch_audio
 from NoiseAI import *
+from tinydb import TinyDB, Query
+from .mock import *
+from .actionable import *
+
 import json
 import logging
 import os
@@ -135,6 +139,35 @@ def setMotorAngle():
 
     return jsonify({"message": "Data received successfully!"}), 200
 
+@app.route('/data/reset', methods=["GET"])
+def datareset():
+    db = TinyDB('db.json')
+    db.truncate()
+    mock_data = generate_mock_data(users=10)
+    for data in mock_data:
+        db.insert(data)
+    return "Db reset", 200
+    
+@app.route('/data/get', methods=["GET"])
+def datareset():
+    db = TinyDB('db.json')
+    return jsonify(db.all()), 200
+
+@app.route('/recommendation/get', methods=["GET"])
+def datareset():
+    db = TinyDB('db.json')
+    
+    chosen_data = db.all()[0]
+    flat_data = [entry for entry in chosen_data['data']]
+    quiet_periods, active_periods = analyze_noise_data(flat_data)
+    
+    nap_recommendations = get_clustered_recommendations(quiet_periods, eps_duration=60, min_duration=30)
+    going_out_recommendations = get_clustered_recommendations(active_periods, eps_duration=120, min_duration=30)
+
+    return jsonify({
+        "nap":nap_recommendations,
+        "go_out":going_out_recommendations
+    }), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=PORT, debug=True)
