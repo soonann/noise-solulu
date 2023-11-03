@@ -15,6 +15,18 @@ class_labels = [
     "siren",
     "street_music"
 ]
+class_weights = (5, #air_conditioner"
+                 5,#car_horn"
+                 5,#children_playing"
+                 5,#dog_bark"
+                 2,#drilling"
+                 5,#engine_idling"
+                 65,#neutral"
+                 2,#jackhammer"
+                 1,#siren"
+                 5,#street_music"
+                 )
+
 
 users = 1
 rows = 10000
@@ -37,9 +49,9 @@ def get_timestamp():
 
 # generate a random class and its decibels
 def get_random_class_decibel():
-    class_label = random.choice(class_labels)
+    class_label = random.choices(class_labels, weights=class_weights)
     decibels = round(random.uniform(30, 100), 2)
-    return class_label, decibels
+    return class_label[0], decibels
 
 
 # Generate users
