@@ -10,7 +10,7 @@ class_labels = [
     "dog_bark",
     "drilling",
     "engine_idling",
-    "gun_shot",
+    "neutral",
     "jackhammer",
     "siren",
     "street_music"
