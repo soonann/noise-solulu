@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 from helper import stitch_audio
 from NoiseAI import *
 from tinydb import TinyDB, Query
-from .mock import *
-from .actionable import *
+from mock import *
+from actionable import *
 
 import json
 import logging
@@ -26,6 +26,7 @@ formatter = logging.Formatter(
     '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
+db = TinyDB('db.json')
 
 load_dotenv()
 HOST = "http://ngrok:4040"
@@ -108,15 +109,9 @@ def exporter():
 
     return jsonify({}), 500
 
-@app.route('/web/grafana/heatmap', methods=['GET'])
-def heatmap():
-    response_data = {
-        'id': 1,
-        'class': 'dog_bark',
-        'decibels': 10,
-    }
-
-    return jsonify([response_data]), 200
+@app.route('/web', methods=['GET'])
+def health():
+    return jsonify({"health": "ok"}), 200
 
 @app.route('/webhook', methods=["POST"])
 def getReading():
@@ -139,23 +134,20 @@ def setMotorAngle():
 
     return jsonify({"message": "Data received successfully!"}), 200
 
-@app.route('/data/reset', methods=["GET"])
+@app.route('/web/reset', methods=["GET"])
 def datareset():
-    db = TinyDB('db.json')
     db.truncate()
     mock_data = generate_mock_data(users=10)
     for data in mock_data:
         db.insert(data)
     return "Db reset", 200
     
-@app.route('/data/get', methods=["GET"])
-def datareset():
-    db = TinyDB('db.json')
+@app.route('/web/get', methods=["GET"])
+def data_get_all():
     return jsonify(db.all()), 200
 
-@app.route('/recommendation/get', methods=["GET"])
-def datareset():
-    db = TinyDB('db.json')
+@app.route('/web/recommendation/get', methods=["GET"])
+def data_recommendation_get():
     
     chosen_data = db.all()[0]
     flat_data = [entry for entry in chosen_data['data']]

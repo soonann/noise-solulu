@@ -1,5 +1,5 @@
 from collections import defaultdict
-from .mock import *
+from mock import *
 from datetime import datetime, timedelta
 import statistics
 from sklearn.cluster import DBSCAN
