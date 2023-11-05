@@ -92,6 +92,16 @@ def receive_audio():
         combined_filename = stitch_audio("./audio")
         app.logger.info(combined_filename)
         prediction = predict(combined_filename, app.logger)
+
+        # handle servo turning
+        # ser = serial.Serial(DEVICE_PATH, 9600)  # open serial port
+        # if prediction['label'] == 'neutral':
+            # ser.write(f'{1}'.encode())  # turn to 1 degree
+        # else:
+            # ser.write(f'{80}'.encode())  # turn to 1 degree
+
+        # ser.close()  # close port
+
         if prediction is None:
             return "Unknown", 200
 
