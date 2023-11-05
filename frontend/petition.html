@@ -4,21 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adjust Aerogel</title>
+    <title>Petition</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-
-        .container {
-            max-width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-    </style>
 </head>
 
 <body>
@@ -45,8 +33,13 @@
         </div>
     </nav>
     <div class="container">
-        <h1>Petition</h1>
-        <p>Submit your petition, make a change!</p>
+        <h1 class="my-3">Make Our Neighborhood Quiet Again!</h1>
+        <p>Hey Neighbor,
+            <br><br>
+            Are you tired of trying to sleep through the endless ruckus or can't enjoy a peaceful moment at home? We
+            hear you, and it's time to speak up about the noisy problem in our area! Fill out this form and join the
+            chorus asking for some peace and quiet.
+        </p>
 
         <form id="petitionForm">
             <div class="form-group mt-3">
@@ -54,18 +47,75 @@
                 <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
             </div>
             <div class="form-group mt-3">
+                <label for="address">Address:</label>
+                <input type="text" class="form-control" id="address"
+                    placeholder="Where do you hear all these unwanted 'soundtracks'?" required>
+            </div>
+            <div class="form-group mt-3">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                <input type="email" class="form-control" id="email"
+                    placeholder="Enter your email (Don't worry, we're not into spamming.)" required>
             </div>
             <div class="form-group mt-3">
                 <label for="message">Message:</label>
-                <textarea class="form-control" id="message" rows="5" placeholder="Enter your message, including as much details as possible"
+                <textarea class="form-control" id="message" rows="5"
+                    placeholder="Enter your message, including as much details as possible. We'd love to hear from you."
                     required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+
+            <div class="form-group mt-3">
+                <p>Have you tried? (Check if yes)</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox1" id="noisemakers" value="Noisemakers talked">
+                    <label class="form-check-label" for="noisemakers">
+                        Talked to the Noisemakers?
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox1" id="authorities" value="Authorities called">
+                    <label class="form-check-label" for="authorities">
+                        Called the Authorities?
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group mt-3">
+                <p>Let's Fix This Together! What would you like us to do? </p>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox2" id="detective" value="detective">
+                    <label class="form-check-label" for="detective">
+                        Detective Work: Can someone come check out these sounds?
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox2" id="rules" value="rules">
+                    <label class="form-check-label" for="rules">
+                        Shhh! Rules: Is there a way to enforce some quiet hours?
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox2" id="move" value="move">
+                    <label class="form-check-label" for="move">
+                        Move It Along: Any chance this noise can take a hike to a better spot?
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox2" id="timing" value="timing">
+                    <label class="form-check-label" for="timing">
+                        Better Timing: How about we agree on some hours when it's okay to get loud?
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox2" id="buster" value="buster">
+                    <label class="form-check-label" for="buster">
+                        Noise Busters: Can we get some sound barriers or other magic to block out the noise?
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Make a Change</button>
         </form>
     </div>
-    <footer class="fixed-bottom bg-dark">
+    <footer class="fixed-bottom py-2 bg-dark">
         <div class="container">
             <p class="m-0 text-center text-white">Copyright &copy; NoiseSolulu
                 <script>document.write(new Date().getFullYear());</script>. All rights reserved.
@@ -77,28 +127,30 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <script>
-        $(document).ready(function () {
-            $("#petitionForm").submit(function (e) {
-                e.preventDefault();
-                var name = $("#name").val();
-                var email = $("#email").val();
-                var message = $("#message").val();
+        // Get the form element
+        const petitionForm = document.getElementById('petitionForm');
 
-                // Perform form validation
-                if (name === "" || email === "" || message === "") {
-                    alert("Please fill out all fields");
-                    return;
-                }
+        // Add a submit event listener to the form
+        petitionForm.addEventListener('submit', function (event) {
+            // Check if the name, address, email, and message fields are empty
+            const nameField = document.getElementById('name');
+            const addressField = document.getElementById('address');
+            const emailField = document.getElementById('email');
+            const messageField = document.getElementById('message');
 
-                // Form submission successful
-                alert("Form submitted successfully");
-                // Sending the form data to a server
+            if (nameField.value.trim() === '' || addressField.value.trim() === '' || emailField.value.trim() === '' || messageField.value.trim() === '') {
+                alert('Please fill out all the required fields.');
+                event.preventDefault(); // Prevent form submission
+            }
 
-                // Reset the form
-                $("#petitionForm")[0].reset();
-            });
+            const actions = document.querySelectorAll('input[name="checkbox2"]:checked');
+            if (actions.length === 0) {
+                alert('Please select at least one action from "What would you like us to do?".');
+                event.preventDefault(); // Prevent form submission
+            }
         });
     </script>
+
 
 
 </body>
