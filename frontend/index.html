@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoiseSolulu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .iframe-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            /* 16:9 aspect ratio (change as needed) */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #bar-container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        #adjustable-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            position: relative;
+        }
+
+        #slider {
+            width: 20px;
+            height: 20px;
+            background-color: #007BFF;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            cursor: pointer;
+        }
+
+        /* Add some additional custom styling */
+        body {
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar {
+            background-color: #343a40;
+            color: #ffffff;
+        }
+
+        .navbar a {
+            color: #ffffff;
+        }
+
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">NoiseSolulu</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="#dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#adjust">Adjust Aerogel</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#petition">Petition</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mt-4" id="dashboard">
+            <h1 class="my-3">Grafana Analytics Dashboard</h1>
+            <div class="iframe-container">
+                <iframe src="https://your-grafana-url1.com"></iframe>
+            </div>
+            <div class="iframe-container">
+                <iframe src="https://your-grafana-url2.com"></iframe>
+            </div>
+            <div class="iframe-container">
+                <iframe src="https://your-grafana-url3.com"></iframe>
+            </div>
+        </div>
+
+        <div class="container my-4">
+            <h1>Noise Forecast</h1>
+            <p>insert noise forecast here</p>
+        </div>
+
+        <div class="container" id="adjust">
+            <h1 class="my-4">Adjust Aerogel</h1>
+            <div id="bar-container">
+                <div id="adjustable-bar">
+                    <div id="slider"></div>
+                </div>
+                <p id="current-value">Current Value: 0</p>
+            </div>
+        </div>
+
+        <div class="container my-4" id="petition">
+            <h1 class="my-3">Make Our Neighborhood Quiet Again!</h1>
+            <p>Hey Neighbor,
+                <br><br>
+                Are you tired of trying to sleep through the endless ruckus or can't enjoy a peaceful moment at home? We
+                hear you, and it's time to speak up about the noisy problem in our area! Fill out this form and join the
+                chorus asking for some peace and quiet.
+            </p>
+
+            <form id="petitionForm">
+                <div class="form-group mt-3">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="address">Address:</label>
+                    <input type="text" class="form-control" id="address"
+                        placeholder="Where do you hear all these unwanted 'soundtracks'?" required>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="email">Email:</label>
+                    <input type="text" class="form-control" id="email"
+                        placeholder="Enter your email (Don't worry, we're not into spamming.)" required>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="message">Message:</label>
+                    <textarea class="form-control" id="message" rows="5"
+                        placeholder="Enter your message, including as much details as possible. We'd love to hear from you."
+                        required></textarea>
+                </div>
+                <div class="form-group mt-3">
+                    <p>Have you tried? (Check if yes)</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox1" id="noisemakers"
+                            value="Noisemakers talked">
+                        <label class="form-check-label" for="noisemakers">
+                            Talked to the Noisemakers?
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox1" id="authorities"
+                            value="Authorities called">
+                        <label class="form-check-label" for="authorities">
+                            Called the Authorities?
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <p>Let's Fix This Together! What would you like us to do? </p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox2" id="detective"
+                            value="detective">
+                        <label class="form-check-label" for="detective">
+                            Detective Work: Can someone come check out these sounds?
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox2" id="rules" value="rules">
+                        <label class="form-check-label" for="rules">
+                            Shhh! Rules: Is there a way to enforce some quiet hours?
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox2" id="move" value="move">
+                        <label class="form-check-label" for="move">
+                            Move It Along: Any chance this noise can take a hike to a better spot?
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox2" id="timing" value="timing">
+                        <label class="form-check-label" for="timing">
+                            Better Timing: How about we agree on some hours when it's okay to get loud?
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox2" id="buster" value="buster">
+                        <label class="form-check-label" for="buster">
+                            Noise Busters: Can we get some sound barriers or other magic to block out the noise?
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Make a Change</button>
+            </form>
+        </div>
+
+        <!-- Back to top button -->
+        <button type="button" class="btn btn-secondary btn-floating btn-lg" id="btn-back-to-top">
+            <span class="bi bi-arrow-up">Back to Top</span>
+        </button>
+    </main>
+
+
+    <footer class="py-2 bg-dark text-white">
+        <div class="container">
+            <p class="m-0 text-center">Copyright &copy; NoiseSolulu
+                <script>document.write(new Date().getFullYear());</script>. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script>
+        // Get the form element
+        const petitionForm = document.getElementById('petitionForm');
+
+        // Add a submit event listener to the form
+        petitionForm.addEventListener('submit', function (event) {
+            // Check if the name, address, email, and message fields are empty
+            const nameField = document.getElementById('name');
+            const addressField = document.getElementById('address');
+            const emailField = document.getElementById('email');
+            const messageField = document.getElementById('message');
+
+            if (nameField.value.trim() === '' || addressField.value.trim() === '' || emailField.value.trim() === '' || messageField.value.trim() === '') {
+                alert('Please fill out all the required fields.');
+                event.preventDefault(); // Prevent form submission
+            }
+
+            const actions = document.querySelectorAll('input[name="checkbox2"]:checked');
+            if (actions.length === 0) {
+                alert('Please select at least one action from "What would you like us to do?".');
+                event.preventDefault
+                    (); // Prevent form submission
+            }
+        });
+
+        // Back to Top Button
+        //Get the button
+        let mybutton = document.getElementById("btn-back-to-top");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (
+                document.body.scrollTop > 20 ||
+                document.documentElement.scrollTop > 20
+            ) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+        // When the user clicks on the button, scroll to the top of the document
+        mybutton.addEventListener("click", backToTop);
+
+        function backToTop() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
+
+</body>
+
+</html>
