@@ -85,7 +85,9 @@ def extract_features(file_name,logger):
 
         # Compute decibel levels
         rms = librosa.feature.rms(y=audio)[0]
-        decibels = abs(np.mean(20 * np.log10(np.abs(rms))))
+        pressure = np.sqrt(np.mean(np.square(audio)))
+        reference_pressure = 20e-6
+        decibels = 20 * np.log10(pressure / reference_pressure)
         #decibels = list(np.abs(decibels))
 
     except Exception as e:
