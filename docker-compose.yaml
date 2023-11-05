@@ -11,10 +11,12 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=grafana
       - GF_FEATURE_TOGGLES_ENABLE=publicDashboards
+      - GF_INSTALL_PLUGINS=magnesium-wordcloud-panel,marcusolsson-json-datasource
     ports:
       - ${GRAFANA_PORT}:${GRAFANA_PORT}
     volumes:
       - ./grafana/grafana_data:/var/lib/grafana
+      # - ./grafana/grafana_data/plugins:/var/lib/grafana/plugins
       - ./grafana:/etc/grafana/provisioning/datasources
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
     networks:

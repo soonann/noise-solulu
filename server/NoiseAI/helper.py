@@ -76,6 +76,13 @@ def extract_features(file_name,logger):
         logger.info(("Reading audio file:", file_name))
         audio, sample_rate = librosa.load(file_name)
 
+        # Get the amplitude of the audio
+        S = np.abs(librosa.stft(audio))
+
+        # Convert the amplitude to decibels
+        db = librosa.amplitude_to_db(S, ref=np.max)
+        decibels = np.mean(db)
+
         # Calculate pad length based on max_pad_len or the length of the audio
         pad_len = max_pad_len - audio.shape[0] if audio.shape[0] < max_pad_len else 0
         audio = np.pad(audio, (0, pad_len), mode='constant')[:max_pad_len]
@@ -84,10 +91,10 @@ def extract_features(file_name,logger):
         mfccs = np.pad(mfccs, pad_width=((0, 0), (0, pad_width)), mode='constant')
 
         # Compute decibel levels
-        rms = librosa.feature.rms(y=audio)[0]
-        pressure = np.sqrt(np.mean(np.square(audio)))
-        reference_pressure = 20e-6
-        decibels = 20 * np.log10(pressure / reference_pressure)
+        # rms = librosa.feature.rms(y=audio)[0]
+        # pressure = np.sqrt(np.mean(np.square(audio)))
+        # reference_pressure = 20e-6
+        # decibels = 20 * np.log10(pressure / reference_pressure)
         #decibels = list(np.abs(decibels))
 
     except Exception as e:
