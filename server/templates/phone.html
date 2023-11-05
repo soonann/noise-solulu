@@ -87,7 +87,7 @@
           mediaRecorder.stop(); // Ensure the recording is stopped
           clearInterval(intervalID); // Clear the interval
       });
-  
+
       async function postAudioChunks() {
           try {
               const audioBlob = new Blob(audioChunks, {

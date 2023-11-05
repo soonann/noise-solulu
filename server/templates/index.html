@@ -2,39 +2,396 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IoT Noise Management</title>
-  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoiseSolulu</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/elXMYpJ.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .iframe-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            /* 16:9 aspect ratio (change as needed) */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        #bar-container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        #adjustable-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            position: relative;
+        }
+
+        #slider {
+            width: 20px;
+            height: 20px;
+            background-color: #007BFF;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            cursor: pointer;
+        }
+
+        /* Add some additional custom styling */
+        body {
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar {
+            background-color: #343a40;
+            color: #ffffff;
+        }
+
+        .navbar a {
+            color: #ffffff;
+        }
+
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
-  <header>
-    <h1>Noise Management Dashboard</h1>
-  </header>
-  <main>
-    
-    <!-- grafana dashboard -->
-    <iframe src="{{ngrok_url}}/d-solo/afd43e5e-676e-4c93-b909-1b25a8b1a6f1/noise-pollution?orgId=1&panelId=1" width="100%" height="600"
-      frameborder="0"></iframe>
-  </main>
-  <footer>
-    <p>&copy; 2023 Your Company</p>
-  </footer>
-  <!-- <script src="{{ url_for('static', filename='script.js') }}"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-    crossorigin="anonymous"></script>
+    <main>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand fs-2 ml-3">NoiseSolulu <img src="https://i.imgur.com/elXMYpJ.png" width="50"
+                        height="50"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
 
-  <!-- Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
-    integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
-    crossorigin="anonymous"></script>
+        <!-- <div class="container my-4 p-5 pt-4">
+            <h1 class="mb-4">Grafana Analytics Dashboard</h1>
+            <div class="row g-2">
+              <div class="col-6">
+                <iframe src="{{ngrok_url}}/d-solo/afd43e5e-676e-4c93-b909-1b25a8b1a6f1/noise-pollution?orgId=1&panelId=1" width="100%" height="300px"></iframe>
+              </div>
+              <div class="col-6">
+                <iframe src="{{ngrok_url}}/d-solo/afd43e5e-676e-4c93-b909-1b25a8b1a6f1/noise-pollution?orgId=1&panelId=4" width="100%" height="300px"></iframe>
+              </div>
+              <div class="col-6">
+                <iframe src="{{ngrok_url}}/d-solo/afd43e5e-676e-4c93-b909-1b25a8b1a6f1/noise-pollution?orgId=1&panelId=3" width="100%" height="300px"></iframe>
+              </div>
+              <div class="col-6">
+                <iframe src="{{ngrok_url}}/d-solo/afd43e5e-676e-4c93-b909-1b25a8b1a6f1/noise-pollution?orgId=1&panelId=5" width="100%" height="300px"></iframe>
+              </div>
+              <div class="col-6">
+                <iframe src="{{ngrok_url}}/d-solo/afd43e5e-676e-4c93-b909-1b25a8b1a6f1/noise-pollution?orgId=1&panelId=6" width="100%" height="300px"></iframe>
+              </div>
+            </div>
+          </div> -->
+
+        <div class="container my-4 p-5 pt-4">
+            <h1 class="mb-4">Noise Forecast</h1>
+            <div class="row g-4" id="forecast_row">
+
+            </div>
+            <p id="recommendation_text" class="mt-5 fs-3 text-center px-5 mx-4">You can take a nap now while its still
+                quiet, the next
+                expected noisy period is 6:00 pm to 9:00 pm</p>
+
+        </div>
+
+
+        <div class="container my-4 p-5" id="petition">
+            <h1 class="mb-3">Make Our Neighborhood Quiet Again!</h1>
+            <p>Hey Neighbor,
+                <br><br>
+                Are you tired of trying to sleep through the endless ruckus or can't enjoy a peaceful moment at home? We
+                hear you, and it's time to speak up about the noisy problem in our area! Fill out this form and join the
+                chorus asking for some peace and quiet.
+            </p>
+
+            <form id="petitionForm">
+                <div class="form-group mt-3">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="address">Address:</label>
+                    <input type="text" class="form-control" id="address"
+                        placeholder="Where do you hear all these unwanted 'soundtracks'?" required>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="email">Email:</label>
+                    <input type="text" class="form-control" id="email"
+                        placeholder="Enter your email (Don't worry, we're not into spamming.)" required>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="message">Message:</label>
+                    <textarea class="form-control" id="message" rows="5"
+                        placeholder="Enter your message, including as much details as possible. We'd love to hear from you."
+                        required></textarea>
+                </div>
+                <div class="form-group mt-3">
+                    <p>Have you tried? (Check if yes)</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox1" id="noisemakers"
+                            value="Noisemakers talked">
+                        <label class="form-check-label" for="noisemakers">
+                            Talked to the Noisemakers?
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox1" id="authorities"
+                            value="Authorities called">
+                        <label class="form-check-label" for="authorities">
+                            Called the Authorities?
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <p>Let's Fix This Together! What would you like us to do? </p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox2" id="detective"
+                            value="detective">
+                        <label class="form-check-label" for="detective">
+                            Detective Work: Can someone come check out these sounds?
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox2" id="rules" value="rules">
+                        <label class="form-check-label" for="rules">
+                            Shhh! Rules: Is there a way to enforce some quiet hours?
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox2" id="move" value="move">
+                        <label class="form-check-label" for="move">
+                            Move It Along: Any chance this noise can take a hike to a better spot?
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox2" id="timing" value="timing">
+                        <label class="form-check-label" for="timing">
+                            Better Timing: How about we agree on some hours when it's okay to get loud?
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox2" id="buster" value="buster">
+                        <label class="form-check-label" for="buster">
+                            Noise Busters: Can we get some sound barriers or other magic to block out the noise?
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Make a Change</button>
+            </form>
+        </div>
+
+        <!-- Back to top button -->
+        <button type="button" class="btn btn-secondary btn-floating btn-lg" id="btn-back-to-top">
+            <span class="bi bi-arrow-up">Back to Top</span>
+        </button>
+    </main>
+
+
+    <footer class="py-2 bg-dark text-white">
+        <div class="container">
+            <p class="m-0 text-center">Copyright &copy; NoiseSolulu
+                <script>document.write(new Date().getFullYear());</script>. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script>
+        // Get the form element
+        const petitionForm = document.getElementById('petitionForm');
+
+        // Add a submit event listener to the form
+        petitionForm.addEventListener('submit', function (event) {
+            // Check if the name, address, email, and message fields are empty
+            const nameField = document.getElementById('name');
+            const addressField = document.getElementById('address');
+            const emailField = document.getElementById('email');
+            const messageField = document.getElementById('message');
+
+            if (nameField.value.trim() === '' || addressField.value.trim() === '' || emailField.value.trim() === '' || messageField.value.trim() === '') {
+                alert('Please fill out all the required fields.');
+                event.preventDefault(); // Prevent form submission
+            }
+
+            const actions = document.querySelectorAll('input[name="checkbox2"]:checked');
+            if (actions.length === 0) {
+                alert('Please select at least one action from "What would you like us to do?".');
+                event.preventDefault
+                    (); // Prevent form submission
+            }
+            event.preventDefault(); // Prevent the default form submission
+
+            const formData = {
+                "name":nameField.value,
+                "address":addressField.value,
+                "email":emailField.value,
+                "message":messageField.value
+            };
+
+            fetch("{{ngrok_url+'/web/send/petition'}}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Specify that we're sending JSON data
+                },
+                body: JSON.stringify(formData)  // Convert the formData object to a JSON string
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Thank you! We have received your petition.');
+                        // Any additional client-side logic after email is sent
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        // Back to Top Button
+        //Get the button
+        let mybutton = document.getElementById("btn-back-to-top");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (
+                document.body.scrollTop > 20 ||
+                document.documentElement.scrollTop > 20
+            ) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+        // When the user clicks on the button, scroll to the top of the document
+        mybutton.addEventListener("click", backToTop);
+
+        function backToTop() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchForecast();
+            setInterval(fetchForecast, 20000);
+        });
+
+        function fetchForecast() {
+            // Replace with your actual endpoint
+            fetch("{{ngrok_url+'/web/recommendation/get'}}")
+                .then(response => response.json())
+                .then(data => {
+                    const today = new Date().getDay();
+                    updateForecastCards(data.go_out, 'Distruption', today);
+                    updateForecastCards(data.nap, 'Peace and Quiet', today);
+                    updateRecommendation(data, today);
+                })
+                .catch(error => console.error('Error fetching forecast:', error));
+        }
+
+        function updateForecastCards(data, title, today) {
+            const forecastRow = document.getElementById('forecast_row');
+            forecastRow.innerHTML = ''; // Clear existing cards
+            data.forEach(forecast => {
+                if (new Date(forecast.start * 1000).getDay() === today) {
+                    const colDiv = document.createElement('div');
+                    colDiv.className = 'col-sm-5 col-lg-3 col-md-4';
+                    const startDate = new Date(forecast.start * 1000);
+                    const endDate = new Date(forecast.end * 1000);
+                    colDiv.innerHTML = `
+                        <div class="card" style="width: 100%;">
+                            <img src="${title === 'Peace and Quiet' ? 'https://i.imgur.com/ZwGLg2H.png' : 'https://i.imgur.com/TPu60n6.png'}" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">${title}</h5>
+                                <p class="card-text">${startDate.toLocaleTimeString()} - ${endDate.toLocaleTimeString()}</p>
+                            </div>
+                        </div>
+                    `;
+                    forecastRow.appendChild(colDiv);
+                }
+            });
+        }
+
+        function updateRecommendation(data, today) {
+            const recommendationText = document.getElementById('recommendation_text');
+            const now = new Date();
+
+            // Get current hours and minutes in the day
+            const nowMinutes = now.getHours() * 60 + now.getMinutes(); // Convert current time to minutes since start of day
+
+            // Filter today's slots and sort by start time
+            let todaySlots = [...data.go_out, ...data.nap].filter(event =>
+                new Date(event.start * 1000).getDay() === today
+            );
+            todaySlots.sort((a, b) => a.start - b.start);
+
+            // Find the current or next event for today
+            let currentOrNextEvent = todaySlots.find(event => {
+                let eventEndTime = new Date(event.end * 1000);
+                let eventEndMinutes = eventEndTime.getHours() * 60 + eventEndTime.getMinutes();
+                return eventEndMinutes >= nowMinutes; // Check if the event end time is after the current time
+            });
+
+            if (currentOrNextEvent) {
+                let eventStartTime = new Date(currentOrNextEvent.start * 1000);
+                let eventEndTime = new Date(currentOrNextEvent.end * 1000);
+                let eventStartMinutes = eventStartTime.getHours() * 60 + eventStartTime.getMinutes();
+
+                if (nowMinutes >= eventStartMinutes) {
+                    // We are currently in an event
+                    let eventEnd = eventEndTime.toLocaleTimeString();
+                    if (data.nap.includes(currentOrNextEvent)) {
+                        recommendationText.textContent = `You can take a nap now while it’s still quiet. The quiet period ends at ${eventEnd}.`;
+                    } else {
+                        recommendationText.textContent = `It’s noisy right now. This will last until ${eventEnd}. Maybe a good time to go out?`;
+                    }
+                } else {
+                    // We are before an event
+                    let eventStart = eventStartTime.toLocaleTimeString();
+                    let eventEnd = eventEndTime.toLocaleTimeString();
+                    recommendationText.textContent = `The next event starts at ${eventStart} and ends at ${eventEnd}.`;
+                }
+            } else {
+                recommendationText.textContent = 'Enjoy the current moment. No events are scheduled for now.';
+            }
+        }
+
+    </script>
+
 </body>
 
 </html>

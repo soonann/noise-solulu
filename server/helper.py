@@ -3,7 +3,7 @@ import os
 import datetime
 import io
 
-def stitch_audio(directory,seconds=3):
+def stitch_audio(directory,logger,seconds=3):
 
     # Get all filenames in the directory
     all_files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
@@ -13,8 +13,8 @@ def stitch_audio(directory,seconds=3):
 
     # Ensure we have at least 3 files
     if len(all_files) < seconds:
-        return "Not enough audio files to combine."
-
+        logger.info("Not enough audio files to combine.")
+        assert "Not enough audio files to combine."
     # Load the last 3 audio files
     filepaths = [os.path.join(directory, all_files[i]) for i in range(-seconds,0,1)]
     audios = list(map(lambda x:AudioSegment.from_file(x,format="webm"),filepaths))

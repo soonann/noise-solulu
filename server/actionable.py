@@ -45,14 +45,14 @@ def print_periods(periods):
 
 def format_period_to_dict(start, end):
     """ Helper function to format a period into a dictionary. """
-    start_str = datetime.fromtimestamp(start).strftime('%A %H:%M')
+    # start_str = datetime.fromtimestamp(start).strftime('%A %H:%M')
     duration = (end - start) // 60  # Duration in minutes
     day = datetime.fromtimestamp(start).strftime('%A')
     return {
         "day": day,
-        "start": start_str,
-        "duration": duration,
-        "recommendation": "nap" if duration <= 60 else "going out"
+        "start": start,
+        "end":end,
+        "duration": duration
     }
 
 def get_clustered_recommendations(periods, eps_duration, min_duration):

@@ -1,6 +1,7 @@
 # app.py
 
 from flask import Flask, render_template, request, jsonify
+from flask_mail import Mail, Message
 from dotenv import load_dotenv
 from helper import stitch_audio
 from NoiseAI import *
@@ -16,6 +17,21 @@ import serial
 import datetime
 
 app = Flask(__name__)
+load_dotenv()
+EMAIL= os.getenv("EMAIL")
+EMAIL_PASSWORD= os.getenv("EMAIL_PASSWORD")
+PORT = os.getenv('FLASK_PORT')
+DEVICE_PATH = os.getenv("DEVICE_PATH")
+HOST = "http://ngrok:4040"
+print(PORT)
+
+# Configure Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = EMAIL
+app.config['MAIL_PASSWORD'] = EMAIL_PASSWORD
+mail = Mail(app)
 
 app.logger.setLevel(logging.DEBUG)  # Set the log level you want
 
@@ -26,13 +42,11 @@ formatter = logging.Formatter(
     '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
-db = TinyDB('db.json')
 
-load_dotenv()
-HOST = "http://ngrok:4040"
-PORT = os.getenv('FLASK_PORT')
-DEVICE_PATH = os.getenv("DEVICE_PATH")
-print(PORT)
+
+
+
+
 
 
 def getUrl():
@@ -89,9 +103,9 @@ def receive_audio():
         # filepath = "audio.webm"
         audio_file.save(filename)
 
-        combined_filename = stitch_audio("./audio")
-        app.logger.info(combined_filename)
-        prediction = predict(combined_filename, app.logger)
+        # combined_filename = stitch_audio("./audio")
+        app.logger.info(f"audio stored: {filename}")
+        # prediction = predict(combined_filename, app.logger)
 
         # handle servo turning
         # ser = serial.Serial(DEVICE_PATH, 9600)  # open serial port
@@ -102,12 +116,31 @@ def receive_audio():
 
         # ser.close()  # close port
 
-        if prediction is None:
-            return "Unknown", 200
+        return "Audio file saved", 200
 
-        return prediction, 200
+    return "Error you should not be here", 400
 
-    return 'No file found', 500
+
+@app.route('/web/get/currentaudio', methods=['GET'])
+def current_audio():
+
+    try:
+        combined_filename = stitch_audio("./audio",app.logger)
+    except Exception as e:
+        app.logger.info(str(e))
+        return jsonify({"decibels":0,"class":"error"}),200
+    prediction = predict(combined_filename, app.logger)
+
+    if DEVICE_PATH is not None:
+        if prediction['decibels'] > 55:
+            degrees = '90'
+        else: degrees = '1'
+        
+        ser = serial.Serial(DEVICE_PATH, 9600)  # open serial port
+        ser.write(degrees.encode())  # write a string
+        ser.close()  # close port
+
+    return prediction, 200
 
 
 @app.route('/web/grafana', methods=['GET'])
@@ -131,6 +164,32 @@ def getReading():
 
     return jsonify({"message": "Data received successfully!"}), 200
 
+@app.route('/web/send/petition', methods=["POST"])
+def submit_petition():
+    
+    app.logger.info(request.json)
+    # Extract data from form submission
+    name = request.json.get('name')
+    address = request.json.get('address')
+    email = request.json.get('email')
+    message = request.json.get('message')
+    app.logger.info(os.getenv("EMAIL"))
+    # Create the message
+    # Send the message
+    try:
+        msg = Message("We Received Your Petition",
+                    sender=EMAIL,
+                    recipients=[email])
+        msg.body = f"Hello {name},\n\nWe have received your petition. Here are the details we got:\nName: {name}\nAddress: {address}\nMessage: {message}\n\nThank you!"
+        msg.html = f"<p>Hello <strong>{name}</strong>,</p><p>We have received your petition. Here are the details we got:</p><ul><li>Name: {name}</li><li>Address: {address}</li><li>Message: {message}</li></ul><p>Thank you!</p>"
+
+    
+        mail.send(msg)
+        return jsonify(success=True, message="Email sent successfully.")
+    except Exception as e:
+        app.logger.info(e)
+        return jsonify(success=False, message=str(e)), 500
+
 
 @app.route('/web/motor', methods=["POST"])
 def setMotorAngle():
@@ -146,20 +205,24 @@ def setMotorAngle():
 
 @app.route('/web/reset', methods=["GET"])
 def datareset():
-    db.truncate()
-    mock_data = generate_mock_data(users=10)
-    for data in mock_data:
-        db.insert(data)
+    with TinyDB('db.json') as db:
+        db.truncate()
+        mock_data = generate_mock_data(users=10)
+        for data in mock_data:
+            db.insert(data)
     return "Db reset", 200
     
 @app.route('/web/get', methods=["GET"])
 def data_get_all():
-    return jsonify(db.all()), 200
+
+    with TinyDB('db.json') as db:
+        data = db.all()
+    return jsonify(data), 200
 
 @app.route('/web/recommendation/get', methods=["GET"])
 def data_recommendation_get():
-    
-    chosen_data = db.all()[0]
+    with TinyDB('db.json') as db:
+        chosen_data = db.all()[0]
     flat_data = [entry for entry in chosen_data['data']]
     quiet_periods, active_periods = analyze_noise_data(flat_data)
     

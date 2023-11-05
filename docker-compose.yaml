@@ -48,6 +48,8 @@ services:
     environment:
       - FLASK_PORT=${FLASK_PORT}
       - DEVICE_PATH=${DEVICE_PATH}
+      - EMAIL=${EMAIL}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
     volumes:
       - ./server:/app
       - "${DEVICE_PATH}:${DEVICE_PATH}"

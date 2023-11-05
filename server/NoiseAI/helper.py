@@ -109,32 +109,41 @@ def predict(file,logger):
     features, decibels = extract_features(file,logger)
 
     if features is not None:
-        # Reshape the features to match the input shape of the TFLite model
-        features = np.expand_dims(features, axis=0)  # Add an extra dimension for the batch size
-        features = np.expand_dims(features, axis=3)  # Add an extra dimension for the channels
-        features = features.astype(np.float32) 
+        if decibels > 55:
+            # Reshape the features to match the input shape of the TFLite model
+            features = np.expand_dims(features, axis=0)  # Add an extra dimension for the batch size
+            features = np.expand_dims(features, axis=3)  # Add an extra dimension for the channels
+            features = features.astype(np.float32) 
 
-        # Set the input tensor
-        input_index = interpreter.get_input_details()[0]['index']
-        interpreter.set_tensor(input_index, features)
+            # Set the input tensor
+            input_index = interpreter.get_input_details()[0]['index']
+            interpreter.set_tensor(input_index, features)
 
-        # Run inference
-        interpreter.invoke()
+            # Run inference
+            interpreter.invoke()
 
-        # Get the output tensor
-        output_index = interpreter.get_output_details()[0]['index']
-        prediction = interpreter.get_tensor(output_index)
+            # Get the output tensor
+            output_index = interpreter.get_output_details()[0]['index']
+            prediction = interpreter.get_tensor(output_index)
 
-        # Get the predicted class label
-        predicted_label = np.argmax(prediction)
-        predicted_class = label_dict.get(predicted_label, 'Unknown')
-        
-        response_data = {
-            'label': predicted_label,
-            'class': predicted_class,
-            'probabilities': {label: float(prob) for label, prob in zip(label_dict.values(), prediction[0])},
-            'decibels': decibels.tolist()
-        }
+            # Get the predicted class label
+            predicted_label = np.argmax(prediction)
+            predicted_class = label_dict.get(predicted_label, 'Unknown')
+            
+
+            response_data = {
+                'label': predicted_label,
+                'class': predicted_class,
+                'probabilities': {label: float(prob) for label, prob in zip(label_dict.values(), prediction[0])},
+                'decibels': decibels
+            }
+        else:
+            response_data = {
+                'label': -1,
+                'class': "Silence",
+                'probabilities': None,
+                'decibels': decibels
+            }
 
         logger.info(response_data)
 
