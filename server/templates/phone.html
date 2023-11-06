@@ -20,78 +20,97 @@
       let isRecording = false;
       let mediaRecorder = null;
       let audioChunks = [];
-
-      document
-        .getElementById("requestPermissions")
-        .addEventListener("click", async () => {
+      let intervalID;
+  
+      document.getElementById("requestPermissions").addEventListener("click", async () => {
           try {
-            // Request for microphone permission
-            const stream = await navigator.mediaDevices.getUserMedia({
-              audio: {
-                echoCancellation: false,
-                noiseSuppression: false,
-                autoGainControl: false,
-                channelCount: 2,
-                sampleRate: 96000,
-                sampleSize: 24,
-              },
-            });
-
-            // Request for GPS permission
-            await navigator.geolocation.getCurrentPosition(() => {});
-
-            // If both are successful
-            hasPermissions = true;
-            document.getElementById("startRecording").disabled = false;
-
-            mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
-            mediaRecorder.ondataavailable = (event) => {
-              audioChunks.push(event.data);
-              if (mediaRecorder.state === "inactive") {
-                postAudioChunks();
-              }
-            };
+              // Request for microphone permission
+              const stream = await navigator.mediaDevices.getUserMedia({
+                  audio: {
+                      echoCancellation: false,
+                      noiseSuppression: false,
+                      autoGainControl: false,
+                      channelCount: 2,
+                      sampleRate: 96000,
+                      sampleSize: 24,
+                  },
+              });
+  
+              // Request for GPS permission
+              await navigator.geolocation.getCurrentPosition(() => {});
+  
+              // If both are successful
+              hasPermissions = true;
+              document.getElementById("startRecording").disabled = false;
+  
+              mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+              mediaRecorder.ondataavailable = (event) => {
+                  audioChunks.push(event.data);
+                  if (mediaRecorder.state === "inactive") {
+                      postAudioChunks();
+                  }
+              };
           } catch (error) {
-            console.error("Error requesting permissions:", error);
+              console.error("Error requesting permissions:", error);
           }
-        });
-
-      document
-        .getElementById("startRecording")
-        .addEventListener("click", () => {
+      });
+  
+      document.getElementById("startRecording").addEventListener("click", () => {
           isRecording = true;
-          mediaRecorder.start();
           document.getElementById("stopRecording").disabled = false;
-
-          // Stop recording after 1s and post the data
-        });
-
+  
+          // Start recording immediately
+          mediaRecorder.start();
+  
+          // Set interval to stop and start recording every second to post the data
+          intervalID = setInterval(() => {
+              if (!isRecording) {
+                  clearInterval(intervalID); // Stop the interval if not recording
+              }
+  
+              mediaRecorder.stop(); // This triggers the 'ondataavailable' event
+  
+              // Wait for 'stop' to complete before starting to record again
+              setTimeout(() => {
+                  if (isRecording) {
+                      audioChunks = []; // Clear old chunks
+                      mediaRecorder.start(); // Start recording again
+                  }
+              }, 10); // Short delay to ensure the previous recording has fully stopped
+          }, 1000);
+      });
+  
       document.getElementById("stopRecording").addEventListener("click", () => {
-        isRecording = false;
-        mediaRecorder.stop();
-        setTimeout(() => {
-          mediaRecorder.stop();
+          isRecording = false;
           document.getElementById("stopRecording").disabled = true;
           document.getElementById("startRecording").disabled = false;
-        }, 1000);
+          mediaRecorder.stop(); // Ensure the recording is stopped
+          clearInterval(intervalID); // Clear the interval
       });
 
       async function postAudioChunks() {
-        try {
-          const audioBlob = new Blob(audioChunks, {
-            type: "audio/webm",
-          });
-          const formData = new FormData();
-          formData.append("audio", audioBlob);
-          await fetch("{{ngrok_url+'/audio'}}", {
-            method: "POST",
-            body: formData,
-          });
-          audioChunks = [];
-        } catch (error) {
-          console.error("Error posting audio:", error);
-        }
+          try {
+              const audioBlob = new Blob(audioChunks, {
+                  type: "audio/webm",
+              });
+              const formData = new FormData();
+              formData.append("audio", audioBlob);
+              fetch("{{ngrok_url+'/web/audio'}}", {
+                  method: "POST",
+                  body: formData,
+              }).then(response => response.json())
+                .then(object => {
+                    if (object) {
+                        console.log(object);
+                    }
+                })
+
+              audioChunks = [];
+          } catch (error) {
+              console.error("Error posting audio:", error);
+          }
       }
-    </script>
+  </script>
+  
   </body>
 </html>

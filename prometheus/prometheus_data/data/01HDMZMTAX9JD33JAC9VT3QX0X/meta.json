@@ -1,0 +1,17 @@
+{
+	"ulid": "01HDMZMTAX9JD33JAC9VT3QX0X",
+	"minTime": 1698246185198,
+	"maxTime": 1698249600000,
+	"stats": {
+		"numSamples": 38021,
+		"numSeries": 440,
+		"numChunks": 440
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01HDMZMTAX9JD33JAC9VT3QX0X"
+		]
+	},
+	"version": 1
+}

@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+
+  # flask
+  flask:
+    user: root
+    privileged: true
+    build:
+      context: ./server
+      dockerfile: Dockerfile.flask
+    container_name: flask
+    environment:
+      - FLASK_PORT=${FLASK_PORT}
+      - DEVICE_PATH=${DEVICE_PATH}
+
+    volumes:
+      - ./server:/app
+      - "${DEVICE_PATH}:${DEVICE_PATH}"
+    ports:
+      - ${FLASK_PORT}:${FLASK_PORT}
+      
+    networks:
+      - iot_network
+
+  # ngrok
+  ngrok:
+    image: wernight/ngrok
+    container_name: ngrok
+    command: /bin/sh -c "ngrok authtoken $$NGROK_TOKEN && ngrok http -hostname=$$NGROK_DOMAIN $$FLASK_PORT"
+    environment:
+      - NGROK_TOKEN=${NGROK_TOKEN}
+      - NGROK_DOMAIN=${NGROK_DOMAIN}
+      - NGINX_PORT=${NGINX_PORT}
+      - FLASK_PORT=${FLASK_PORT}
+    ports:
+      - 4040:4040
+    networks:
+      - iot_network
+
+networks:
+  iot_network:
+

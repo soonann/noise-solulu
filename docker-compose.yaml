@@ -11,10 +11,12 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=grafana
       - GF_FEATURE_TOGGLES_ENABLE=publicDashboards
+      - GF_INSTALL_PLUGINS=magnesium-wordcloud-panel,marcusolsson-json-datasource
     ports:
       - ${GRAFANA_PORT}:${GRAFANA_PORT}
     volumes:
       - ./grafana/grafana_data:/var/lib/grafana
+      # - ./grafana/grafana_data/plugins:/var/lib/grafana/plugins
       - ./grafana:/etc/grafana/provisioning/datasources
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
     networks:
@@ -30,23 +32,27 @@ services:
       - 9090:9090
     restart: unless-stopped
     volumes:
-      - ./prometheus:/etc/prometheus
-      - prom_data:/prometheus
+      - ./prometheus/config:/etc/prometheus
+      #- ./prometheus/prometheus_data:/prometheus
     networks:
       - iot_network
 
   # flask
   flask:
+    user: root
+    privileged: true
     build:
       context: ./server
       dockerfile: Dockerfile.flask
     container_name: flask
-    depends_on:
-      - ngrok
     environment:
       - FLASK_PORT=${FLASK_PORT}
+      - DEVICE_PATH=${DEVICE_PATH}
+      - EMAIL=${EMAIL}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
     volumes:
       - ./server:/app
+      - "${DEVICE_PATH}:${DEVICE_PATH}"
     ports:
       - ${FLASK_PORT}:${FLASK_PORT}
     networks:
@@ -54,12 +60,12 @@ services:
 
   # nginx
   nginx:
+    depends_on:
+      - grafana
+      - flask
+      - ngrok
     image: nginx:latest
     container_name: nginx
-    depends_on:
-      - flask
-      - grafana
-      - prometheus
     environment:
       - NGROK_DOMAIN=${NGROK_DOMAIN}
     volumes:
@@ -86,9 +92,4 @@ services:
 
 networks:
   iot_network:
-
-
-volumes:
-  prom_data:
-
 
