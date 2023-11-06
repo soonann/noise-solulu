@@ -55,16 +55,16 @@ sound_durations = {
 
 # Weights are only used during daytime to simulate higher activity
 daytime_weights = {
-    "air_conditioner": 3,
-    "car_horn": 3,
-    "children_playing": 3,
-    "dog_bark": 3,
-    "drilling": 3,
-    "engine_idling": 3,
-    "neutral": 90,  # Neutral is still the most common sound
-    "jackhammer": 3,
-    "siren": 3,
-    "street_music": 3
+    "air_conditioner": 5,
+    "car_horn": 5,
+    "children_playing": 5,
+    "dog_bark": 5,
+    "drilling": 5,
+    "engine_idling": 5,
+    "neutral": 80,  # Neutral is still the most common sound
+    "jackhammer": 5,
+    "siren": 5,
+    "street_music": 5
 }
 
 # Utility functions

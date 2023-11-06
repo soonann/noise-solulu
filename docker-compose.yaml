@@ -50,6 +50,7 @@ services:
       - DEVICE_PATH=${DEVICE_PATH}
       - EMAIL=${EMAIL}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - SERVO_URL=${SERVO_URL}
     volumes:
       - ./server:/app
       - "${DEVICE_PATH}:${DEVICE_PATH}"

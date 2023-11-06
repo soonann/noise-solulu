@@ -22,6 +22,7 @@ EMAIL= os.getenv("EMAIL")
 EMAIL_PASSWORD= os.getenv("EMAIL_PASSWORD")
 PORT = os.getenv('FLASK_PORT')
 DEVICE_PATH = os.getenv("DEVICE_PATH")
+SERVO_URL = os.getenv("SERVO_URL")
 HOST = "http://ngrok:4040"
 print(PORT)
 
@@ -128,6 +129,12 @@ def current_audio():
     app.logger.info("Trying to predict audio")
     prediction = predict(combined_filename, app.logger)
 
+    if prediction["decibels"] > 35:
+        res = requests.post(url=f"{SERVO_URL}/web/motor",json={"degree":90})
+        if res.status_code == 200:
+            return jsonify(prediction), 200
+        else:
+            app.logger.info(res.json)
     return jsonify(prediction), 200
 
 

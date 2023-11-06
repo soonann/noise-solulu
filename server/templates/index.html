@@ -295,40 +295,52 @@
         });
 
         function fetchForecast() {
-            // Replace with your actual endpoint
-            fetch("{{ngrok_url+'/web/recommendation/get'}}")
-                .then(response => response.json())
-                .then(data => {
-                    const today = new Date().getDay();
-                    updateForecastCards(data.go_out, 'Distruption', today);
-                    updateForecastCards(data.nap, 'Peace and Quiet', today);
-                    updateRecommendation(data, today);
-                })
-                .catch(error => console.error('Error fetching forecast:', error));
-        }
-
-        function updateForecastCards(data, title, today) {
-            const forecastRow = document.getElementById('forecast_row');
+    // Replace with your actual endpoint
+    fetch("{{ngrok_url+'/web/recommendation/get'}}")
+        .then(response => response.json())
+        .then(data => {
+            const today = new Date().getDay();
+            let forecastRow = document.getElementById('forecast_row');
             forecastRow.innerHTML = ''; // Clear existing cards
-            data.forEach(forecast => {
-                if (new Date(forecast.start * 1000).getDay() === today) {
-                    const colDiv = document.createElement('div');
-                    colDiv.className = 'col-sm-5 col-lg-3 col-md-4';
-                    const startDate = new Date(forecast.start * 1000);
-                    const endDate = new Date(forecast.end * 1000);
-                    colDiv.innerHTML = `
-                        <div class="card" style="width: 100%;">
-                            <img src="${title === 'Peace and Quiet' ? 'https://i.imgur.com/ZwGLg2H.png' : 'https://i.imgur.com/TPu60n6.png'}" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">${title}</h5>
-                                <p class="card-text">${startDate.toLocaleTimeString()} - ${endDate.toLocaleTimeString()}</p>
-                            </div>
-                        </div>
-                    `;
-                    forecastRow.appendChild(colDiv);
-                }
+
+            // Combine go_out and nap data
+            let combinedData = data.go_out.concat(data.nap);
+
+            // Filter combined data for today and sort by start time
+            let todayData = combinedData.filter(forecast => new Date(forecast.start * 1000).getDay() === today);
+            todayData.sort((a, b) => a.start - b.start); // Sort by start time in ascending order
+
+            // Update the forecast cards with sorted data
+            todayData.forEach(forecast => {
+                const title = data.go_out.includes(forecast) ? 'Disruption' : 'Peace and Quiet';
+                updateForecastCards([forecast], title, today); // Pass the forecast as an array
             });
-        }
+
+            updateRecommendation(data, today);
+        })
+        .catch(error => console.error('Error fetching forecast:', error));
+}
+
+function updateForecastCards(data, title, today) {
+    const forecastRow = document.getElementById('forecast_row');
+    data.forEach(forecast => {
+        // Assuming 'forecast' has already been filtered for today's date, no need to check again here
+        const colDiv = document.createElement('div');
+        colDiv.className = 'col-sm-5 col-lg-3 col-md-4';
+        const startDate = new Date(forecast.start * 1000);
+        const endDate = new Date(forecast.end * 1000);
+        colDiv.innerHTML = `
+            <div class="card" style="width: 100%;">
+                <img src="${title === 'Peace and Quiet' ? 'https://i.imgur.com/ZwGLg2H.png' : 'https://i.imgur.com/TPu60n6.png'}" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">${title}</h5>
+                    <p class="card-text">${startDate.toLocaleTimeString()} - ${endDate.toLocaleTimeString()}</p>
+                </div>
+            </div>
+        `;
+        forecastRow.appendChild(colDiv);
+    });
+}
 
         function updateRecommendation(data, today) {
             const recommendationText = document.getElementById('recommendation_text');
