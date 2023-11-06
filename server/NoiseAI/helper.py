@@ -52,7 +52,7 @@ def predict(file,logger):
     # Calculate the mean decibel level across the entire audio clip relative to absolute silence
     decibels = int(np.mean(db))
     logger.info(decibels)
-    if decibels > 45:
+    if decibels > 35:
         try:
             scores, embeddings, spectrogram = model(audio)
             scores_np = scores.numpy()
