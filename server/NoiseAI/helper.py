@@ -1,153 +1,78 @@
+import tensorflow_hub as hub
+import tensorflow as tf
 import numpy as np
 import librosa
-import tensorflow as tf
-import os
-from tensorflow import keras
+from flask import Flask, request, jsonify
 
-max_pad_len = 174
-num_rows = 40
-num_columns = 174
-num_channels = 1
+import csv
+import scipy
+from IPython.display import Audio
+from scipy.io import wavfile
 
-# Define the label dictionary for mapping label indices to class names
-label_dict = {
-    0: 'air_conditioner',
-    1: 'car_horn',
-    2: 'children_playing',
-    3: 'dog_bark',
-    4: 'drilling',
-    5: 'engine_idling',
-    6: 'neutral',
-    7: 'jackhammer',
-    8: 'siren',
-    9: 'street_music'
-}
-
-model_path = os.path.join(os.path.dirname(__file__), 'models/sound_classification.tflite')
-interpreter = tf.lite.Interpreter(model_path=model_path)
-interpreter.allocate_tensors()
+model = hub.load("https://tfhub.dev/google/yamnet/1")
 
 
+# Find the name of the class with the top score when mean-aggregated across frames.
+def class_names_from_csv(class_map_csv_text):
+  """Returns list of class names corresponding to score vector."""
+  class_names = []
+  with tf.io.gfile.GFile(class_map_csv_text) as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+      class_names.append(row['display_name'])
 
-# def extract_features(filename,logger):
-#     try:
-#         logger.info("Reading audio data...")
-#         audio, sample_rate = librosa.load(filename)
-        
-#         mfccs = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=40)
-#         pad_width = max_pad_len - mfccs.shape[1]
-#         mfccs = np.pad(mfccs, pad_width=((0, 0), (0, pad_width)), mode='constant')
+  return class_names
 
-#         return mfccs
-#     except Exception as e:
-#         logger.info("Error encountered while parsing the audio data.")
-#         assert e
-    
-
-
-# def predict(filename,logger):
-
-    
-#     # Extract features from the stitched audio data
-#     features = extract_features(filename,logger)
-#     logger.info(features.shape)
-
-#     if features is not None:
-#         # Reshape the features to match the input shape of the model
-#         features = features.reshape(1, num_rows, num_columns, num_channels)
-
-#         # Predict the class of the audio file
-#         prediction = model.predict(features)
-#         logger.info(prediction)
-#         # Get the predicted class label
-#         predicted_label = int(np.argmax(prediction))
-#         predicted_class = label_dict.get(predicted_label, 'Unknown')
-
-#         # Return the predicted class label and class name as a response
-#         return {'label': predicted_label, 'class': predicted_class}
-#     else:
-#         return {'error': 'Failed to extract features from audio.'}
-    
+def ensure_sample_rate(original_sample_rate, waveform,
+                       desired_sample_rate=16000):
+  """Resample waveform if required."""
+  if original_sample_rate != desired_sample_rate:
+    desired_length = int(round(float(len(waveform)) /
+                               original_sample_rate * desired_sample_rate))
+    waveform = scipy.signal.resample(waveform, desired_length)
+  return desired_sample_rate, waveform
 
 
-def extract_features(file_name,logger):
-    try:
-        print("Reading audio file:", file_name)
-        logger.info(("Reading audio file:", file_name))
-        audio, sample_rate = librosa.load(file_name)
-
-        # Get the amplitude of the audio
-        S = np.abs(librosa.stft(audio))
-
-        # Convert the amplitude to decibels
-        db = librosa.amplitude_to_db(S, ref=np.max)
-        decibels = np.mean(db)
-
-        # Calculate pad length based on max_pad_len or the length of the audio
-        pad_len = max_pad_len - audio.shape[0] if audio.shape[0] < max_pad_len else 0
-        audio = np.pad(audio, (0, pad_len), mode='constant')[:max_pad_len]
-        mfccs = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=40)
-        pad_width = max_pad_len - mfccs.shape[1]
-        mfccs = np.pad(mfccs, pad_width=((0, 0), (0, pad_width)), mode='constant')
-
-        # Compute decibel levels
-        # rms = librosa.feature.rms(y=audio)[0]
-        # pressure = np.sqrt(np.mean(np.square(audio)))
-        # reference_pressure = 20e-6
-        # decibels = 20 * np.log10(pressure / reference_pressure)
-        #decibels = list(np.abs(decibels))
-
-    except Exception as e:
-        print("Error encountered while parsing file: ", file_name)
-        print("Error message:", str(e))
-        return None, None
-
-    return mfccs, decibels
+class_map_path = model.class_map_path().numpy()
+class_names = class_names_from_csv(class_map_path)
 
 
 def predict(file,logger):
-    features, decibels = extract_features(file,logger)
+    audio, sample_rate = librosa.load(file, sr=16000, mono=True)
+    
+    # Get the amplitude of the audio
+    S = np.abs(librosa.stft(audio))
 
-    if features is not None:
-        if decibels > 55:
-            # Reshape the features to match the input shape of the TFLite model
-            features = np.expand_dims(features, axis=0)  # Add an extra dimension for the batch size
-            features = np.expand_dims(features, axis=3)  # Add an extra dimension for the channels
-            features = features.astype(np.float32) 
+    # Convert the amplitude to decibels using the smallest possible non-zero value encoded by the bit depth as the reference
+    # For 16-bit audio, this would be 1/32768
+    ref_value = 1/32768
 
-            # Set the input tensor
-            input_index = interpreter.get_input_details()[0]['index']
-            interpreter.set_tensor(input_index, features)
+    # Convert to decibels
+    db = librosa.amplitude_to_db(S, ref=ref_value)
+    # Calculate the mean decibel level across the entire audio clip relative to absolute silence
+    decibels = int(np.mean(db))
+    logger.info(decibels)
+    if decibels > 45:
+        try:
+            scores, embeddings, spectrogram = model(audio)
+            scores_np = scores.numpy()
+            spectrogram_np = spectrogram.numpy()
+            infered_class = class_names[scores_np.mean(axis=0).argmax()]
 
-            # Run inference
-            interpreter.invoke()
+        except Exception as e:
+           logger.info(str(e))
+        response_data = {
+            'class': infered_class,
+            'decibels': decibels
+        }
+    else:
+        response_data = {
+            'class': "Silence",
+            'decibels': decibels
+        }
 
-            # Get the output tensor
-            output_index = interpreter.get_output_details()[0]['index']
-            prediction = interpreter.get_tensor(output_index)
-
-            # Get the predicted class label
-            predicted_label = np.argmax(prediction)
-            predicted_class = label_dict.get(predicted_label, 'Unknown')
-            
-
-            response_data = {
-                'label': predicted_label,
-                'class': predicted_class,
-                'probabilities': {label: float(prob) for label, prob in zip(label_dict.values(), prediction[0])},
-                'decibels': decibels
-            }
-        else:
-            response_data = {
-                'label': -1,
-                'class': "Silence",
-                'probabilities': None,
-                'decibels': decibels
-            }
-
-        logger.info(response_data)
+    logger.info(response_data)
 
         # Return the predicted class label and class name as a response
-        return response_data
-    else:
-        return {'error': 'Failed to extract features from audio.'}
+    return response_data
+    

@@ -45,10 +45,6 @@ app.logger.addHandler(handler)
 
 
 
-
-
-
-
 def getUrl():
     tunnels = requests.get(os.path.join(HOST, "api/tunnels")).json()['tunnels']
     url = [i for i in tunnels if 'https' in i['public_url']][0]['public_url']
@@ -129,18 +125,10 @@ def current_audio():
     except Exception as e:
         app.logger.info(str(e))
         return jsonify({"decibels":0,"class":"error"}),200
+    app.logger.info("Trying to predict audio")
     prediction = predict(combined_filename, app.logger)
 
-    if DEVICE_PATH is not None:
-        if prediction['decibels'] > 55:
-            degrees = '90'
-        else: degrees = '1'
-        
-        ser = serial.Serial(DEVICE_PATH, 9600)  # open serial port
-        ser.write(degrees.encode())  # write a string
-        ser.close()  # close port
-
-    return prediction, 200
+    return jsonify(prediction), 200
 
 
 @app.route('/web/grafana', methods=['GET'])
